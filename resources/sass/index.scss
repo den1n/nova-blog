@@ -1,0 +1,114 @@
+@media all {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .blog-post {
+        border-bottom: 1px dotted #ddd;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+
+    .blog-post-info {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .blog-post-category {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .blog-post-date {
+        margin-left: auto;
+    }
+
+    .blog-post-avatar {
+        margin-left: 1rem;
+
+        img {
+            border-radius: 50%;
+            box-shadow: 0 0 2px rgba(0, 0, 0, .8);
+            height: 32px;
+            transition: box-shadow .3s;
+            width: 32px;
+            will-change: box-shadow;
+        }
+
+        &:active img,
+        &:hover img,
+        &:focus img {
+            box-shadow: 0 0 5px rgba(0, 0, 0, .8);
+        }
+    }
+
+    .blog-post-title {
+        font-size: 1.5rem;
+    }
+
+    .blog-sidebar .blog-post-title {
+        font-size: 1.2rem;
+    }
+
+    .blog-post-annotation {
+        margin-top: 1rem;
+    }
+
+    .blog-post-annotation:empty,
+    .blog-post-content:empty {
+        display: none;
+    }
+
+    .blog-post-annotation figure[data-trix-content-type=image],
+    .blog-post-content figure[data-trix-content-type=image] {
+        text-align: center;
+    }
+
+    .blog-post-annotation img,
+    .blog-post-content img {
+        height: 100%;
+        max-width: 100%;
+    }
+
+    .blog-post-read-next::after {
+        content: "→";
+        margin-left: 5px;
+    }
+
+    .blog-post-title:not(:last-child),
+    .blog-post-annotation:not(:last-child),
+    .blog-post-content:not(:last-child),
+    .blog-post-tags:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+
+    .blog-post-categories {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-post-categories-item::before {
+        content: "→";
+        margin-right: 5px;
+    }
+
+    .blog-post-tags {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .blog-post-tags-item {
+        margin-right: .8rem;
+        text-transform: lowercase;
+    }
+}
