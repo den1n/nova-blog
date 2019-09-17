@@ -31,8 +31,8 @@ class CreateBlogTables extends Migration
             $table->text('content')->nullable();
             $table->integer('category_id')->unsigned();
             $table->bigInteger('author_id')->unsigned();
-            $table->timestamp('published_at')->useCurrent();
             $table->timestamps();
+            $table->timestamp('published_at')->useCurrent();
 
             $table->foreign('category_id')->references('id')->on($tables['categories']);
             $table->foreign('author_id')->references('id')->on($tables['users']);

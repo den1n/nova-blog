@@ -55,7 +55,7 @@ class PostResource extends Resource
     {
         if (empty($request->get('orderBy'))) {
             $query->getQuery()->orders = [];
-            return $query->orderBy('created_at', 'desc');
+            return $query->orderBy('published_at', 'desc');
         }
         return $query;
     }
@@ -125,20 +125,20 @@ class PostResource extends Resource
                 ->rules('nullable', 'string')
                 ->hideFromIndex(),
 
-            DateTime::make(__('Published At'), 'published_at')
-                ->hideWhenCreating()
-                ->hideWhenUpdating()
-                ->sortable(),
-
             DateTime::make(__('Created At'), 'created_at')
+                ->hideFromIndex()
                 ->hideWhenCreating()
-                ->hideWhenUpdating()
-                ->sortable(),
+                ->hideWhenUpdating(),
 
             DateTime::make(__('Updated At'), 'updated_at')
                 ->hideFromIndex()
                 ->hideWhenCreating()
                 ->hideWhenUpdating(),
+
+            DateTime::make(__('Published At'), 'published_at')
+                ->hideWhenCreating()
+                ->hideWhenUpdating()
+                ->sortable(),
 
             BelongsTo::make(__('Author'), 'author', $resources['user'])
                 ->hideWhenCreating()
