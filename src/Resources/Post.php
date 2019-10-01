@@ -1,19 +1,18 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Resources;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Resource;
 
-class PostResource extends Resource
+class Post extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -29,9 +28,8 @@ class PostResource extends Resource
      * The columns that should be searched.
      */
     public static $search = [
-        'slug',
         'title',
-        'description',
+        'annotation',
         'content',
     ];
 
@@ -44,21 +42,11 @@ class PostResource extends Resource
     ];
 
     /**
-     * Indicates if the resource should be displayed in the sidebar.
+     * Display order of data in index table.
      */
-    public static $displayInNavigation = false;
-
-    /**
-     * Build an "index" query for the given resource.
-     */
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        if (empty($request->get('orderBy'))) {
-            $query->getQuery()->orders = [];
-            return $query->orderBy('published_at', 'desc');
-        }
-        return $query;
-    }
+    public static $displayInOrder = [
+        ['published_at', 'desc'],
+    ];
 
     /**
      * Get the fields displayed by the resource.
@@ -118,12 +106,10 @@ class PostResource extends Resource
                 ->firstDayOfWeek(1),
 
             $this->makeEditorField(__('Annotation'), 'annotation')
-                ->rules('nullable', 'string')
-                ->hideFromIndex(),
+                ->rules('nullable', 'string'),
 
             $this->makeEditorField(__('Content'), 'content')
-                ->rules('nullable', 'string')
-                ->hideFromIndex(),
+                ->rules('nullable', 'string'),
 
             DateTime::make(__('Created At'), 'created_at')
                 ->hideFromIndex()
@@ -145,6 +131,8 @@ class PostResource extends Resource
                 ->hideWhenUpdating()
                 ->sortable(),
 
+            HasMany::make(__('Comments'), 'comments', $resources['comment']),
+
             BelongsToMany::make(__('Tags'), 'tags', $resources['tag']),
         ];
     }
@@ -160,20 +148,6 @@ class PostResource extends Resource
                 $templates[$template['name']] = __($template['description']);
             return $templates;
         });
-    }
-
-    /**
-     * Creates field for edit rich content of resource based on application configuration.
-     */
-    protected function makeEditorField($name, $field): \Laravel\Nova\Fields\Field
-    {
-        $class = config('nova-blog.editor.class');
-        $field = $class::make($name, $field);
-        foreach (config('nova-blog.editor.options') as $method => $arguments) {
-            if (method_exists($field, $method))
-                $field->{$method}(...$arguments);
-        }
-        return $field;
     }
 
     /**
@@ -214,10 +188,10 @@ class PostResource extends Resource
     public function filters(Request $request): array
     {
         return [
-            new AuthorFilter,
-            new CategoryFilter,
-            new TemplateFilter,
-            new StatusFilter,
+            new \Den1n\NovaBlog\Filters\Category,
+            new \Den1n\NovaBlog\Filters\Template,
+            new \Den1n\NovaBlog\Filters\Status,
+            new \Den1n\NovaBlog\Filters\Author,
         ];
     }
 
@@ -235,7 +209,7 @@ class PostResource extends Resource
     public function actions(Request $request): array
     {
         return [
-            (new PublishAction)->canSee(function ($request) {
+            (new \Den1n\NovaBlog\Actions\Publish)->canSee(function ($request) {
                 return $request->user()->can('blogUpdatePosts');
             }),
         ];

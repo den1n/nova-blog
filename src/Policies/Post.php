@@ -1,17 +1,17 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
+use \Den1n\NovaBlog\Models\Post as Model;
 
-class PostPolicy
+class Post
 {
     use HandlesAuthorization;
 
     public function before($user)
     {
-        if ($user->can('blogManager'))
-            return true;
+        return $user->can('blogManager');
     }
 
     public function viewAny($user): bool
@@ -19,7 +19,7 @@ class PostPolicy
         return $user->can('blogViewPosts');
     }
 
-    public function view($user, Post $post): bool
+    public function view($user, Model $post): bool
     {
         return $user->can('blogViewPosts');
     }
@@ -29,22 +29,22 @@ class PostPolicy
         return $user->can('blogCreatePosts');
     }
 
-    public function update($user, Post $post): bool
+    public function update($user, Model $post): bool
     {
         return $user->can('blogUpdatePosts') and $user->id == $post->author_id;
     }
 
-    public function delete($user, Post $post): bool
+    public function delete($user, Model $post): bool
     {
         return $user->can('blogDeletePosts') and $user->id == $post->author_id;
     }
 
-    public function restore($user, Post $post): bool
+    public function restore($user, Model $post): bool
     {
         return $user->can('blogDeletePosts') and $user->id == $post->author_id;
     }
 
-    public function forceDelete($user, Post $post): bool
+    public function forceDelete($user, Model $post): bool
     {
         return $user->can('blogDeletePosts') and $user->id == $post->author_id;
     }

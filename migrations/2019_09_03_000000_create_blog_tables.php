@@ -62,14 +62,15 @@ class CreateBlogTables extends Migration
         Schema::create($tables['comments'], function (Blueprint $table) use ($tables) {
             $table->increments('id');
             $table->string('content', 4000);
-            $table->bigInteger('author_id')->unsigned();
-            $table->integer('post_id')->unsigned();
+            $table->integer('rating')->nullable()->default(0);
             $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('post_id')->unsigned();
+            $table->bigInteger('author_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('author_id')->references('id')->on($tables['users']);
+            $table->foreign('parent_id')->references('id')->on($tables['comments']);
             $table->foreign('post_id')->references('id')->on($tables['posts']);
-            $table->foreign('parent_id')->references('id')->on($tables['posts']);
+            $table->foreign('author_id')->references('id')->on($tables['users']);
         });
     }
 

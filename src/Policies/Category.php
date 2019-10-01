@@ -1,17 +1,16 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CategoryPolicy
+class Category
 {
     use HandlesAuthorization;
 
     public function before($user)
     {
-        if ($user->can('blogManager'))
-            return true;
+        return $user->can('blogManager');
     }
 
     public function viewAny($user): bool

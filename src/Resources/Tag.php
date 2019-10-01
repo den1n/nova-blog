@@ -1,16 +1,14 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Resources;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Resource;
 
-class TagResource extends Resource
+class Tag extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -29,23 +27,6 @@ class TagResource extends Resource
         'slug',
         'name',
     ];
-
-    /**
-     * Indicates if the resource should be displayed in the sidebar.
-     */
-    public static $displayInNavigation = false;
-
-    /**
-     * Build an "index" query for the given resource.
-     */
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        if (empty($request->get('orderBy'))) {
-            $query->getQuery()->orders = [];
-            return $query->orderBy('name');
-        }
-        return $query;
-    }
 
     /**
      * Get the fields displayed by the resource.

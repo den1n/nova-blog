@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card blog-card">
     <div class="card-header">{{ __($title ?? 'Categories') }}</div>
     <div class="card-body">
         <div class="blog-post-categories">

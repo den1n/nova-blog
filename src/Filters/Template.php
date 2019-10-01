@@ -1,18 +1,18 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
-class AuthorFilter extends \Laravel\Nova\Filters\Filter
+class Template extends \Laravel\Nova\Filters\Filter
 {
     /**
      * Get the displayable name of the filter.
      */
     public function name(): string
     {
-        return __('Author');
+        return __('Template');
     }
 
     /**
@@ -20,7 +20,7 @@ class AuthorFilter extends \Laravel\Nova\Filters\Filter
      */
     public function apply(Request $request, $query, $value): Builder
     {
-        return $query->where('author_id', $value);
+        return $query->where('template', $value);
     }
 
     /**
@@ -28,6 +28,9 @@ class AuthorFilter extends \Laravel\Nova\Filters\Filter
      */
     public function options(Request $request): array
     {
-        return config('nova-blog.models.user')::all()->pluck('id', 'name')->toArray();
+        $templates = [];
+        foreach (config('nova-blog.controller.templates') as $template)
+            $templates[__($template['description'])] = $template['name'];
+        return $templates;
     }
 }

@@ -7,10 +7,10 @@ return [
      */
 
     'models' => [
-        'post' => \Den1n\NovaBlog\Post::class,
-        'category' => \Den1n\NovaBlog\Category::class,
-        'comment' => \Den1n\NovaBlog\Comment::class,
-        'tag' => \Den1n\NovaBlog\Tag::class,
+        'post' => \Den1n\NovaBlog\Models\Post::class,
+        'category' => \Den1n\NovaBlog\Models\Category::class,
+        'comment' => \Den1n\NovaBlog\Models\Comment::class,
+        'tag' => \Den1n\NovaBlog\Models\Tag::class,
         'user' => config('auth.providers.users.model', \App\User::class),
     ],
 
@@ -19,10 +19,10 @@ return [
      */
 
     'resources' => [
-        'post' => \Den1n\NovaBlog\PostResource::class,
-        'category' => \Den1n\NovaBlog\CategoryResource::class,
-        'comment' => \Den1n\NovaBlog\CommentResource::class,
-        'tag' => \Den1n\NovaBlog\TagResource::class,
+        'post' => \Den1n\NovaBlog\Resources\Post::class,
+        'category' => \Den1n\NovaBlog\Resources\Category::class,
+        'comment' => \Den1n\NovaBlog\Resources\Comment::class,
+        'tag' => \Den1n\NovaBlog\Resources\Tag::class,
         'user' => \App\Nova\User::class,
     ],
 
@@ -76,7 +76,7 @@ return [
          * Number of posts displayed on one page.
          */
 
-        'posts_per_page' => 20,
+        'posts_per_page' => 15,
 
         /**
          * Number of posts displayed on sidebar.
@@ -94,7 +94,7 @@ return [
          * Number of tags displayed on sidebar.
          */
 
-        'tags_on_sidebar' => 50,
+        'tags_on_sidebar' => 25,
 
         /**
          * Array of templates used by controller.

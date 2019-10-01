@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card blog-card">
     <div class="card-header">{{ __($title ?? 'Posts') }}</div>
-    <div class="card-body">
+    <div class="card-body blog-post-list">
         @forelse($posts as $p)
             <div class="blog-post">
                 @include('nova-blog::info', [

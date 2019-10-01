@@ -1,8 +1,7 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Actions;
 
-use App\AccountData;
 use Illuminate\Bus\Queueable;
 use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
@@ -12,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Fields\DateTime;
 
-class PublishAction extends Action
+class Publish extends Action
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

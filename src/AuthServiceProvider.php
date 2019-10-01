@@ -12,6 +12,10 @@ class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthS
         'blogCreatePosts',
         'blogUpdatePosts',
         'blogDeletePosts',
+        'blogViewComments',
+        'blogCreateComments',
+        'blogUpdateComments',
+        'blogDeleteComments',
         'blogViewCategories',
         'blogCreateCategories',
         'blogUpdateCategories',
@@ -29,9 +33,10 @@ class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthS
     {
         $models = config('nova-blog.models');
         $this->policies = [
-            $models['post'] => PostPolicy::class,
-            $models['category'] => CategoryPolicy::class,
-            $models['tag'] => TagPolicy::class,
+            $models['post'] => Policies\Post::class,
+            $models['comment'] => Policies\Comment::class,
+            $models['category'] => Policies\Category::class,
+            $models['tag'] => Policies\Tag::class,
         ];
 
         $this->registerPolicies();

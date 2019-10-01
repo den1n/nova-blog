@@ -1,18 +1,18 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
-class CategoryFilter extends \Laravel\Nova\Filters\Filter
+class Author extends \Laravel\Nova\Filters\Filter
 {
     /**
      * Get the displayable name of the filter.
      */
     public function name(): string
     {
-        return __('Category');
+        return __('Author');
     }
 
     /**
@@ -20,7 +20,7 @@ class CategoryFilter extends \Laravel\Nova\Filters\Filter
      */
     public function apply(Request $request, $query, $value): Builder
     {
-        return $query->where('category_id', $value);
+        return $query->where('author_id', $value);
     }
 
     /**
@@ -28,6 +28,6 @@ class CategoryFilter extends \Laravel\Nova\Filters\Filter
      */
     public function options(Request $request): array
     {
-        return Category::all()->pluck('id', 'name')->toArray();
+        return config('nova-blog.models.user')::all()->pluck('id', 'name')->toArray();
     }
 }

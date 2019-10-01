@@ -5,7 +5,7 @@
 @section('title', $post->title)
 
 @section('nova-blog-content')
-    <div class="card">
+    <div class="card blog-card">
         <div class="card-header">{{ $post->title }}</div>
         <div class="card-body">
             <div class="blog-post">
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div class="card">
+    <div class="card blog-card">
         <div class="card-header">{{ __('Comments') }}</div>
         <div class="card-body">
         </div>

@@ -1,18 +1,18 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
-class TemplateFilter extends \Laravel\Nova\Filters\Filter
+class Status extends \Laravel\Nova\Filters\Filter
 {
     /**
      * Get the displayable name of the filter.
      */
     public function name(): string
     {
-        return __('Template');
+        return __('Status');
     }
 
     /**
@@ -20,7 +20,12 @@ class TemplateFilter extends \Laravel\Nova\Filters\Filter
      */
     public function apply(Request $request, $query, $value): Builder
     {
-        return $query->where('template', $value);
+        switch ($value) {
+            case 'published':
+                return $query->where('published_at', '<=', now());
+            case 'hidden':
+                return $query->where('published_at', '>', now());
+        }
     }
 
     /**
@@ -28,9 +33,9 @@ class TemplateFilter extends \Laravel\Nova\Filters\Filter
      */
     public function options(Request $request): array
     {
-        $templates = [];
-        foreach (config('nova-blog.controller.templates') as $template)
-            $templates[__($template['description'])] = $template['name'];
-        return $templates;
+        return [
+            __('Published') => 'published',
+            __('Hidden') => 'hidden',
+        ];
     }
 }

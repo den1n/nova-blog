@@ -57,9 +57,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             });
         });
 
-        Post::observe(PostObserver::class);
-        Category::observe(CategoryObserver::class);
-        Tag::observe(TagObserver::class);
+        $models = config('nova-blog.models');
+        $models['post']::observe(Observers\Post::class);
+        $models['category']::observe(Observers\Category::class);
+        $models['comment']::observe(Observers\Comment::class);
+        $models['tag']::observe(Observers\Tag::class);
     }
 
     /**

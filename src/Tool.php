@@ -13,27 +13,9 @@ class Tool extends \Laravel\Nova\Tool
     {
         $models = config('nova-blog.models');
         $resources = config('nova-blog.resources');
-        $resources['post']::$model = $models['post'];
-        $resources['category']::$model = $models['category'];
-        $resources['tag']::$model = $models['tag'];
-
-        if ($resources['post'] == PostResource::class) {
-            Nova::resources([
-                $resources['post'],
-            ]);
-        }
-
-        if ($resources['category'] == CategoryResource::class) {
-            Nova::resources([
-                $resources['category'],
-            ]);
-        }
-
-        if ($resources['tag'] == TagResource::class) {
-            Nova::resources([
-                $resources['tag'],
-            ]);
-        }
+        foreach ($resources as $name => $class)
+            $class::$model = $models[$name];
+        Nova::resources($resources);
     }
 
 	/**
@@ -44,6 +26,7 @@ class Tool extends \Laravel\Nova\Tool
         $resources = config('nova-blog.resources');
 		return view('nova-blog::navigation', [
             'postUriKey' => $resources['post']::uriKey(),
+            'commentUriKey' => $resources['comment']::uriKey(),
             'categoryUriKey' => $resources['category']::uriKey(),
             'tagUriKey' => $resources['tag']::uriKey(),
         ]);

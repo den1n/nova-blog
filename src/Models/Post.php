@@ -1,13 +1,13 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Scout\Searchable;
 
 class Post extends \Illuminate\Database\Eloquent\Model
 {
-    // use Searchable;
+    use Searchable;
 
     protected $guarded = [
         'id',
@@ -24,6 +24,10 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
     protected $dates = [
         'published_at',
+    ];
+
+    protected $hidden = [
+        'ts',
     ];
 
     /**
@@ -69,23 +73,49 @@ class Post extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Include only recent posts.
+     * Get the indexable data array for the model.
      */
-    public function scopeRecent(Builder $query, int $page = 0, int $limit = 20): Builder
+    public function toSearchableArray(): array
     {
-        return $query->latest('published_at', 'desc')
-            ->skip($page * $limit)
-            ->take($limit);
+        return [
+            'title' => $this->title,
+            'annotation' => $this->annotation,
+            'content' => $this->content,
+        ];
     }
 
     /**
-     * Include only searched posts.
+     * Get the options for searching engine.
      */
-    public function scopeSearch(Builder $query, string $search): Builder
+    public function searchableOptions()
     {
-        return $query->whereRaw('ts @@ to_tsquery(:ts)', [
-            'ts' => preg_replace('/\s+/', '|', $search),
-        ]);
+        return [
+            'column' => 'ts',
+            'maintain_index' => true,
+            'rank' => [
+                'fields' => [
+                    'title' => 'A',
+                    'annotation' => 'B',
+                    'content' => 'C',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Include only recent posts.
+     */
+    public function scopeRecent(Builder $query): Builder
+    {
+        return $query->latest('published_at', 'desc');
+    }
+
+    /**
+     * Include only posts by author.
+     */
+    public function scopeAuthor(Builder $query, int ...$ids): Builder
+    {
+        return $query->whereIn('author_id', $ids);
     }
 
     /**
@@ -94,6 +124,14 @@ class Post extends \Illuminate\Database\Eloquent\Model
     public function scopeExclude(Builder $query, int ...$ids): Builder
     {
         return $query->whereNotIn('id', $ids);
+    }
+
+    /**
+     * Exclude posts by author.
+     */
+    public function scopeExcludeByAuthor(Builder $query, int ...$ids): Builder
+    {
+        return $query->whereNotIn('author_id', $ids);
     }
 
     /**
@@ -115,7 +153,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Get the category of the post.
+     * Get the category.
      */
     public function category()
     {
@@ -123,7 +161,15 @@ class Post extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Get the tags for the post.
+     * Get the comments.
+     */
+    public function comments()
+    {
+        return $this->hasMany(config('nova-blog.models.comment'));
+    }
+
+    /**
+     * Get the tags.
      */
     public function tags()
     {
@@ -134,11 +180,10 @@ class Post extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Get the author of the post.
+     * Get the author.
      */
     public function author()
     {
-        return $this->belongsTo(config('nova-blog.models.user'))
-            ->orderBy('name');
+        return $this->belongsTo(config('nova-blog.models.user'));
     }
 }

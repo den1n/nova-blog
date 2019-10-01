@@ -3,11 +3,9 @@
 @section('title', __('Search result'))
 
 @section('nova-blog-content')
-    <div class="card">
-        <div class="card-header">
-            {{ __('Search result') }}
-        </div>
-        <div class="card-body">
+    <div class="card blog-card">
+        <div class="card-header">{{ __('Search result') }}</div>
+        <div class="card-body blog-post-list">
             @forelse($posts as $p)
                 @include('nova-blog::post', [
                     'post' => $p,
@@ -15,6 +13,7 @@
             @empty
                 <span>{{ __('Nothing found') }}</span>
             @endforelse
+            {{ $posts->links() }}
         </div>
     </div>
 @endsection

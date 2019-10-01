@@ -3,16 +3,15 @@
 @section('title', $author->name)
 
 @section('nova-blog-content')
-    <div class="card">
-        <div class="card-header">
-            {{ $author->name }}
-        </div>
-        <div class="card-body">
+    <div class="card blog-card">
+        <div class="card-header">{{ $author->name }}</div>
+        <div class="card-body blog-post-list">
             @foreach($posts as $p)
                 @include('nova-blog::post', [
                     'post' => $p,
                 ])
             @endforeach
+            {{ $posts->links() }}
         </div>
     </div>
 @endsection

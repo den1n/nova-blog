@@ -1,18 +1,18 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Observers;
 
-use Illuminate\Support\Str;
+use Den1n\NovaBlog\Models\Post as Model;
 
-class PostObserver
+class Post
 {
     /**
      * Generate unique post slug.
      */
-    protected function generateSlug (Post $post): string
+    protected function generateSlug (Model $post): string
     {
         $counter = 1;
-        $slug = $original = $post->slug ?: Str::slug($post->title);
+        $slug = $original = $post->slug ?: \Illuminate\Support\Str::slug($post->title);
         while (config('nova-blog.models.post')::where('id', '!=', $post->id)->where('slug', $slug)->exists())
             $slug = $original . '-' . (++$counter);
         return $slug;
@@ -21,7 +21,7 @@ class PostObserver
     /**
      * Handle the Post "saving" event.
      */
-    public function saving(Post $post): void
+    public function saving(Model $post): void
     {
         $post->published_at = $post->published_at ?: now();
         $post->slug = $this->generateSlug($post);

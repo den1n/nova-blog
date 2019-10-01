@@ -1,10 +1,10 @@
 <?php
 
-namespace Den1n\NovaBlog;
+namespace Den1n\NovaBlog\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class Category extends \Illuminate\Database\Eloquent\Model
+class Tag extends \Illuminate\Database\Eloquent\Model
 {
     protected $guarded = [
         'id',
@@ -19,7 +19,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
      */
     public function getTable()
     {
-        return config('nova-blog.tables.categories', parent::getTable());
+        return config('nova-blog.tables.tags', parent::getTable());
     }
 
     /**
@@ -35,13 +35,13 @@ class Category extends \Illuminate\Database\Eloquent\Model
      */
     public function getUrlAttribute(): string
     {
-        return route('nova-blog.category', [
-            'category' => $this,
+        return route('nova-blog.tag', [
+            'tag' => $this,
         ]);
     }
 
     /**
-     * Exclude categories from query.
+     * Exclude tags from query.
      */
     public function scopeExclude(Builder $query, int ...$ids): Builder
     {
@@ -49,10 +49,23 @@ class Category extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Get the posts of the category.
+     * Exclude tags when owned by a post.
+     */
+    public function scopeExcludeByPost(Builder $query, int ...$ids): Builder
+    {
+        return $query->whereDoesntHave('posts', function ($query) use ($ids) {
+            $query->whereIn('id', $ids);
+        });
+    }
+
+    /**
+     * Get the posts of the tag.
      */
     public function posts()
     {
-        return $this->hasMany(config('nova-blog.models.post'));
+        return $this->belongsToMany(
+            config('nova-blog.models.post'),
+            config('nova-blog.tables.post_tags')
+        );
     }
 }
