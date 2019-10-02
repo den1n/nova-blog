@@ -73,10 +73,26 @@ return [
         'class' => \Den1n\NovaBlog\BlogController::class,
 
         /**
+         * Allow readers to search for posts.
+         */
+        'allow_searching' => true,
+
+        /**
+         * Allow readers to comment on posts.
+         */
+        'allow_commenting' => false,
+
+        /**
          * Number of posts displayed on one page.
          */
 
         'posts_per_page' => 15,
+
+        /**
+         * Number of posts displayed on one page.
+         */
+
+        'comments_per_page' => 100,
 
         /**
          * Number of posts displayed on sidebar.

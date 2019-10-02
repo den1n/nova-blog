@@ -35,6 +35,11 @@ class Post extends \Illuminate\Database\Eloquent\Model
         'ts',
     ];
 
+    protected $with = [
+        'category',
+        'author',
+    ];
+
     /**
      * Get the table associated with the model.
      */

@@ -20,11 +20,13 @@
             </div>
         </div>
     </div>
-    <div class="card blog-card">
-        <div class="card-header">{{ __('Comments') }}</div>
-        <div class="card-body">
+    @if(config('nova-blog.controller.allow_commenting'))
+        <div class="card blog-card">
+            <div class="card-header">{{ __('Comments') }}</div>
+            <div class="card-body">
+            </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('nova-blog-sidebar')
