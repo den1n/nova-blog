@@ -40,6 +40,7 @@ class BlogController extends \App\Http\Controllers\Controller
         if (config('nova-blog.controller.allow_searching')) {
             $query = request()->input('query');
             $posts = config('nova-blog.models.post')::search($query)
+                ->orderBy('published_at', 'desc')
                 ->usingWebSearchQuery();
 
             return view('nova-blog::search', [
