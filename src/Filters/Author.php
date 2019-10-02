@@ -28,6 +28,8 @@ class Author extends \Laravel\Nova\Filters\Filter
      */
     public function options(Request $request): array
     {
-        return config('nova-blog.models.user')::all()->pluck('id', 'name')->toArray();
+        return config('nova-blog.models.user')::orderBy('name')
+            ->pluck('id', 'name')
+            ->toArray();
     }
 }

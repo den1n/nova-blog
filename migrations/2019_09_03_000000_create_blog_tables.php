@@ -24,7 +24,7 @@ class CreateBlogTables extends Migration
             $table->increments('id');
             $table->string('slug')->unique();
             $table->string('title');
-            $table->string('keywords')->nullable();
+            $table->jsonb('keywords')->nullable()->default('[]');
             $table->string('description')->nullable();
             $table->string('template');
             $table->text('annotation')->nullable();
@@ -34,14 +34,15 @@ class CreateBlogTables extends Migration
             $table->timestamps();
             $table->timestamp('published_at')->useCurrent();
 
-            $table->foreign('category_id')->references('id')->on($tables['categories']);
-            $table->foreign('author_id')->references('id')->on($tables['users']);
-
+            $table->foreign('category_id')->references('id')->on($tables['categories'])->onDelete('cascade');
+            $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
             $table->index('published_at');
         });
 
-        DB::statement(sprintf('alter table %s add ts tsvector null', $tables['posts']));
-        DB::statement(sprintf('create index %1$s_ts_index on %1$s using gin (ts)', $tables['posts']));
+        if (config('database.default') === 'pgsql') {
+            DB::statement(sprintf('alter table %s add ts tsvector null', $tables['posts']));
+            DB::statement(sprintf('create index %1$s_ts_index on %1$s using gin (ts)', $tables['posts']));
+        }
 
         Schema::create($tables['tags'], function (Blueprint $table) {
             $table->increments('id');
@@ -54,8 +55,8 @@ class CreateBlogTables extends Migration
             $table->integer('post_id')->unsigned();
             $table->integer('tag_id')->unsigned();
 
-            $table->foreign('post_id')->references('id')->on($tables['posts']);
-            $table->foreign('tag_id')->references('id')->on($tables['tags']);
+            $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on($tables['tags'])->onDelete('cascade');
 
         });
 
@@ -68,9 +69,9 @@ class CreateBlogTables extends Migration
             $table->bigInteger('author_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('parent_id')->references('id')->on($tables['comments']);
-            $table->foreign('post_id')->references('id')->on($tables['posts']);
-            $table->foreign('author_id')->references('id')->on($tables['users']);
+            $table->foreign('parent_id')->references('id')->on($tables['comments'])->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
+            $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
         });
     }
 

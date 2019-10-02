@@ -34,8 +34,8 @@ class Status extends \Laravel\Nova\Filters\Filter
     public function options(Request $request): array
     {
         return [
-            __('Published') => 'published',
-            __('Hidden') => 'hidden',
+            __('Is Published') => 'published',
+            __('Is Hidden') => 'hidden',
         ];
     }
 }

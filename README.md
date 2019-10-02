@@ -16,7 +16,7 @@ Publish package resources.
 php artisan vendor:publish --provider=Den1n\NovaBlog\ServiceProvider
 ```
 
-This will publish these resources:
+This will publish the following resources:
 
 * Configuration file `config/nova-blog.php`
 * Migration file `database/migrations/*_create_blog_tables.php`

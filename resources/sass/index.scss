@@ -3,9 +3,17 @@
         margin-bottom: 1rem;
         padding: 0;
 
+        .card-header {
+            font-size: 1.75rem;
+        }
+
         .card-body {
             padding: 0;
         }
+    }
+
+    .blog-notice {
+        padding: 1.25rem;
     }
 
     .blog-post {

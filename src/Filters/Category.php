@@ -28,6 +28,8 @@ class Category extends \Laravel\Nova\Filters\Filter
      */
     public function options(Request $request): array
     {
-        return config('nova-blog.models.category')::all()->pluck('id', 'name')->toArray();
+        return config('nova-blog.models.category')::orderBy('name')
+            ->pluck('id', 'name')
+            ->toArray();
     }
 }

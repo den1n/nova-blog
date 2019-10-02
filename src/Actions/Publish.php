@@ -36,12 +36,11 @@ class Publish extends Action
     /**
      * Perform the action on the given models.
      */
-    public function handle(ActionFields $fields, Collection $models): array
+    public function handle(ActionFields $fields, Collection $models): void
     {
         foreach ($models as $model) {
             $model->published_at = $fields->date;
             $model->save();
         }
-        return Action::message(__('Posts are published!'));
     }
 }

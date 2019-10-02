@@ -15,11 +15,16 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
     protected $attributes = [
         'template' => 'default',
+        'keywords' => '[]',
     ];
 
     protected $appends = [
         'is_published',
         'url',
+    ];
+
+    protected $casts = [
+        'keywords' => 'array',
     ];
 
     protected $dates = [
@@ -107,7 +112,8 @@ class Post extends \Illuminate\Database\Eloquent\Model
      */
     public function scopeRecent(Builder $query): Builder
     {
-        return $query->latest('published_at', 'desc');
+        return $query->latest('published_at')
+            ->where('published_at', '<=', now());
     }
 
     /**

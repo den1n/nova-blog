@@ -10,7 +10,8 @@ class Category
 
     public function before($user)
     {
-        return $user->can('blogManager');
+        if ($user->can('blogManager'))
+            return true;
     }
 
     public function viewAny($user): bool

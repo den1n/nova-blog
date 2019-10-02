@@ -1,6 +1,10 @@
 {
-    "/index.js": "/index.js?id=925494b373d91695ee69",
-    "/index.css": "/index.css?id=0c493f2a153cdd0950c3",
-    "/index.js.map": "/index.js.map?id=2a264db07f8a8421d669",
-    "/index.css.map": "/index.css.map?id=e9e0853696b24e13952f"
+    "/fields.js": "/fields.js?id=2b65af63d0466e392db8",
+    "/fields.js.map": "/fields.js.map?id=95b41d4beb3825f37199",
+    "/index.js": "/index.js?id=62e33a01c1d65168f995",
+    "/index.css": "/index.css?id=5320326b2304b8ef5be2",
+    "/fields.css": "/fields.css?id=cd8035ee0b9dd698a7aa",
+    "/index.js.map": "/index.js.map?id=ccf74a71be4ebb21fefe",
+    "/index.css.map": "/index.css.map?id=e9e0853696b24e13952f",
+    "/fields.css.map": "/fields.css.map?id=381f80a1e75dbf03258c"
 }

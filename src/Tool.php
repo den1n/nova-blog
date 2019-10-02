@@ -13,9 +13,12 @@ class Tool extends \Laravel\Nova\Tool
     {
         $models = config('nova-blog.models');
         $resources = config('nova-blog.resources');
-        foreach ($resources as $name => $class)
-            $class::$model = $models[$name];
-        Nova::resources($resources);
+        foreach ($resources as $name => $class) {
+            if ($name !== 'user') {
+                $class::$model = $models[$name];
+                Nova::resources([$class]);
+            }
+        }
     }
 
 	/**

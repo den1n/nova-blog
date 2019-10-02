@@ -17,7 +17,7 @@ class Tag extends \Illuminate\Database\Eloquent\Model
     /**
      * Get the table associated with the model.
      */
-    public function getTable()
+    public function getTable(): string
     {
         return config('nova-blog.tables.tags', parent::getTable());
     }

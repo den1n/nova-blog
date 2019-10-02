@@ -11,7 +11,7 @@
                     'post' => $p,
                 ])
             @empty
-                <span>{{ __('Nothing found') }}</span>
+                <div class="blog-notice">{{ __('Nothing found') }}.</div>
             @endforelse
             {{ $posts->links() }}
         </div>

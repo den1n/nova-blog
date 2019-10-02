@@ -13,6 +13,27 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot(): void
     {
+        $this->publishResources();
+        $this->loadTranslations();
+        $this->loadRoutes();
+
+        $models = config('nova-blog.models');
+        $models['post']::observe(Observers\Post::class);
+        $models['category']::observe(Observers\Category::class);
+        $models['comment']::observe(Observers\Comment::class);
+        $models['tag']::observe(Observers\Tag::class);
+
+        Nova::serving(function (ServingNova $event) {
+            Nova::script('nova-blog-fields', __DIR__ . '/../dist/fields.js');
+            Nova::style('nova-blog-fields', __DIR__ . '/../dist/fields.css');
+        });
+    }
+
+    /**
+     *  Publish package resources.
+     */
+    protected function publishResources(): void
+    {
         $this->publishes([
             __DIR__ . '/../config' => config_path(),
         ], 'config');
@@ -32,12 +53,24 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([
             __DIR__ . '/../dist' => public_path('vendor/nova-blog'),
         ], 'public');
+    }
 
+    /**
+     *  Load package translation files.
+     */
+    protected function loadTranslations(): void
+    {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-blog');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova-blog');
-        $this->loadJSONTranslationsFrom(__DIR__.'/../resources/lang');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'nova-blog');
+        $this->loadJSONTranslationsFrom(__DIR__ . '/../resources/lang');
         $this->loadJsonTranslationsFrom(resource_path('lang/vendor/nova-blog'));
+    }
 
+    /**
+     *  Load package routes.
+     */
+    protected function loadRoutes(): void
+    {
         Route::macro('novaBlogRoutes', function (string $prefix = 'blog') {
             Route::model('post', config('nova-blog.models.post'));
             Route::model('category', config('nova-blog.models.category'));
@@ -48,20 +81,25 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 'namespace' => '\\' . __NAMESPACE__,
             ], function () {
                 $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
-                Route::get('/{int?}', $controller . '@index')->where('int', '\d+')->name('nova-blog.index');
-                Route::get('/search/{int?}', $controller . '@search')->name('nova-blog.search');
-                Route::get('/author/{id}/{int?}', $controller . '@author')->name('nova-blog.author');
-                Route::get('/category/{category}/{int?}', $controller . '@category')->name('nova-blog.category');
-                Route::get('/tag/{tag}/{int?}', $controller . '@tag')->name('nova-blog.tag');
+                Route::get('/', $controller . '@index')->where('int', '\d+')->name('nova-blog.index');
+                Route::get('/search', $controller . '@search')->name('nova-blog.search');
+                Route::get('/author/{id}', $controller . '@author')->name('nova-blog.author');
+                Route::get('/category/{category}', $controller . '@category')->name('nova-blog.category');
+                Route::get('/tag/{tag}', $controller . '@tag')->name('nova-blog.tag');
                 Route::get('/{post}', $controller . '@show')->name('nova-blog.show');
             });
         });
 
-        $models = config('nova-blog.models');
-        $models['post']::observe(Observers\Post::class);
-        $models['category']::observe(Observers\Category::class);
-        $models['comment']::observe(Observers\Comment::class);
-        $models['tag']::observe(Observers\Tag::class);
+        $this->app->booted(function() {
+            if (!$this->app->routesAreCached()) {
+                Route::group([
+                    'prefix' => 'nova-vendor/den1n/nova-blog',
+                    'middleware' => ['nova', 'api'],
+                ], function () {
+                    Route::get('/tags/field', TagsFieldController::class . '@index');
+                });
+            }
+        });
     }
 
     /**

@@ -2,15 +2,18 @@
 
 namespace Den1n\NovaBlog\Resources;
 
+use Den1n\NovaBlog\Fields\Keywords;
+use Den1n\NovaBlog\Fields\Tags;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Panel;
 
 class Post extends Resource
 {
@@ -65,34 +68,8 @@ class Post extends Resource
                 ->displayUsingLabels()
                 ->sortable(),
 
-            Text::make(__('Slug'), 'slug')
-                ->help(__('Will be filled automatically if leave empty'))
-                ->rules('nullable', 'string', 'max:255')
-                ->hideFromIndex(),
-
-            Text::make(__('Title'), 'title')
-                ->rules('required', 'string', 'max:255')
-                ->hideFromIndex()
-                ->hideFromDetail(),
-
-            Text::make(__('Title'), 'title', function () {
-                return sprintf('<a href="%s" title="%s" target="_blank">%s</a>',
-                    $this->url, __('Open post in new window'), $this->title
-                );
-            })
-                ->asHtml()
-                ->hideWhenCreating()
-                ->hideWhenUpdating()
-                ->sortable(),
-
-            Text::make(__('Keywords'), 'keywords')
-                ->help(__('List of keywords separated by commas'))
-                ->rules('nullable', 'string', 'max:255')
-                ->hideFromIndex(),
-
-            Text::make(__('Description'), 'description')
-                ->rules('nullable', 'string', 'max:255')
-                ->hideFromIndex(),
+            new Panel(__('Content'), $this->makeContentFields()),
+            new Panel(__('Search Optimization'), $this->makeSEOFields()),
 
             Boolean::make(__('Is Published'), 'is_published')
                 ->hideWhenCreating()
@@ -104,12 +81,6 @@ class Post extends Resource
                 ->hideFromIndex()
                 ->hideFromDetail()
                 ->firstDayOfWeek(1),
-
-            $this->makeEditorField(__('Annotation'), 'annotation')
-                ->rules('nullable', 'string'),
-
-            $this->makeEditorField(__('Content'), 'content')
-                ->rules('nullable', 'string'),
 
             DateTime::make(__('Created At'), 'created_at')
                 ->hideFromIndex()
@@ -131,9 +102,9 @@ class Post extends Resource
                 ->hideWhenUpdating()
                 ->sortable(),
 
-            HasMany::make(__('Comments'), 'comments', $resources['comment']),
-
             BelongsToMany::make(__('Tags'), 'tags', $resources['tag']),
+
+            HasMany::make(__('Comments'), 'comments', $resources['comment']),
         ];
     }
 
@@ -148,6 +119,60 @@ class Post extends Resource
                 $templates[$template['name']] = __($template['description']);
             return $templates;
         });
+    }
+
+    /**
+     * Get the content fields.
+     */
+    protected function makeContentFields(): array
+    {
+        return [
+            Text::make(__('Slug'), 'slug')
+                ->help(__('Will be filled automatically if leave empty'))
+                ->rules('nullable', 'string', 'max:255')
+                ->hideFromIndex(),
+
+            Text::make(__('Title'), 'title')
+                ->rules('required', 'string', 'max:255')
+                ->hideFromIndex()
+                ->hideFromDetail(),
+
+            Text::make(__('Title'), 'title', function () {
+                return sprintf('<a href="%s" title="%s" target="_blank">%s</a>',
+                    $this->url, __('Open post in new window'), $this->title
+                );
+            })
+                ->asHtml()
+                ->hideWhenCreating()
+                ->hideWhenUpdating()
+                ->sortable(),
+
+            $this->makeEditorField(__('Annotation'), 'annotation')
+                ->rules('nullable', 'string'),
+
+            $this->makeEditorField(__('Content'), 'content')
+                ->rules('nullable', 'string'),
+        ];
+    }
+
+    /**
+     * Get the SEO fields.
+     */
+    protected function makeSEOFields(): array
+    {
+        return [
+            Keywords::make(__('Keywords'))
+                ->help(__('List of keywords separated by commas'))
+                ->hideFromIndex(),
+
+            Text::make(__('Description'), 'description')
+                ->rules('nullable', 'string', 'max:255')
+                ->hideFromIndex(),
+
+            Tags::make(__('Tags'))
+                ->help(__('Press Enter to add a tag, Tab to cycle over suggestions'))
+                ->hideFromIndex(),
+        ];
     }
 
     /**

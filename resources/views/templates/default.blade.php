@@ -1,6 +1,6 @@
 @extends('nova-blog::layout')
 
-@section('meta-keywords', $post->keywords)
+@section('meta-keywords', implode(',', $post->keywords))
 @section('meta-description', $post->description)
 @section('title', $post->title)
 
