@@ -18,8 +18,7 @@
 
 @section('nova-blog-sidebar')
     @include('nova-blog::sidebar.posts', [
-        'title' => 'Another posts',
-        'posts' => $anotherPosts,
+        'posts' => $sidebarPosts,
     ])
     @include('nova-blog::sidebar.categories', [
         'categories' => $categories,

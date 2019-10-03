@@ -8,7 +8,9 @@
                         <div class="input-group">
                             <input class="form-control" type="text" name="query" value="{{ $oldQuery ?? '' }}" placeholder="{{ __('Enter search query') }}" required>
                             <div class="input-group-append ml-2">
-                                <button class="btn btn-secondary" type="submit">{{ __('Search') }}</button>
+                                <button class="btn btn-secondary" type="submit">
+                                    {{ __('Search') }}
+                                </button>
                             </div>
                         </div>
                     </div>

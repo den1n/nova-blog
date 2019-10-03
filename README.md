@@ -84,9 +84,9 @@ Template is published to views directory `resources/views/vendor/nova-blog/templ
 Template will receive these variables when processed:
 
 * $post: instance of `Post` model.
-* $anotherPosts: collection of `Post` models.
-* $anotherCategories: collection of `Category` models.
-* $anotherTags: collection of `Tag` models.
+* $sidebarPosts: collection of `Post` models.
+* $sidebarCategories: collection of `Category` models.
+* $sidebarTags: collection of `Tag` models.
 
 You can freely modify `default` template.
 
@@ -128,13 +128,9 @@ After that your custom template will be available to select when creating blog p
 
 ![Post Detail](https://raw.githubusercontent.com/den1n/nova-blog/master/screens/post-detail.png)
 
-### Categories
+### Blog Example
 
-![Categories](https://raw.githubusercontent.com/den1n/nova-blog/master/screens/categories.png)
-
-### Tags
-
-![Tags](https://raw.githubusercontent.com/den1n/nova-blog/master/screens/tags.png)
+![Blog Example](https://raw.githubusercontent.com/den1n/nova-blog/master/screens/blog.png)
 
 ## Contributing
 

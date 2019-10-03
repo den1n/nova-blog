@@ -1,10 +1,10 @@
 @extends('nova-blog::layout')
 
-@section('title', __('Recent posts'))
+@section('title', __('Recent Posts'))
 
 @section('nova-blog-content')
     <div class="card blog-card">
-        <div class="card-header">{{ __('Recent posts') }}</div>
+        <div class="card-header">{{ __('Recent Posts') }}</div>
         <div class="card-body blog-post-list">
             @foreach($posts as $p)
                 @include('nova-blog::post', [

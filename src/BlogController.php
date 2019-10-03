@@ -46,7 +46,7 @@ class BlogController extends \App\Http\Controllers\Controller
             return view('nova-blog::search', [
                 'tags' => $this->sidebarTags(),
                 'categories' => $this->sidebarCategories(),
-                'anotherPosts' => $this->sidebarPosts(),
+                'sidebarPosts' => $this->sidebarPosts(),
                 'posts' => $posts->paginate($this->postsPerPage),
                 'oldQuery' => $query,
             ]);
@@ -61,13 +61,13 @@ class BlogController extends \App\Http\Controllers\Controller
     {
         if ($post->is_published or ($user = auth()->user() and $user->can('blogManager'))) {
             return view('nova-blog::templates.' . $post->template, [
-                'anotherTags' => $this->sidebarTags(function($query) use ($post) {
+                'sidebarTags' => $this->sidebarTags(function($query) use ($post) {
                     return $query->excludeByPost($post->id);
                 }),
-                'anotherCategories' => $this->sidebarCategories(function($query) use ($post) {
+                'sidebarCategories' => $this->sidebarCategories(function($query) use ($post) {
                     return $query->exclude($post->category_id);
                 }),
-                'anotherPosts' => $this->sidebarPosts(function($query) use ($post) {
+                'sidebarPosts' => $this->sidebarPosts(function($query) use ($post) {
                     return $query->exclude($post->id);
                 }),
                 'post' => $post,
@@ -85,7 +85,7 @@ class BlogController extends \App\Http\Controllers\Controller
             'tags' => $this->sidebarTags(),
             'categories' => $this->sidebarCategories(),
             'author' => config('nova-blog.models.user')::find($authorId),
-            'anotherPosts' => $this->sidebarPosts(function($query) use ($authorId) {
+            'sidebarPosts' => $this->sidebarPosts(function($query) use ($authorId) {
                 return $query->excludeByAuthor($authorId);
             }),
             'posts' => $this->recentPosts(function($query) use ($authorId) {
@@ -102,10 +102,10 @@ class BlogController extends \App\Http\Controllers\Controller
         return view('nova-blog::category', [
             'tags' => $this->sidebarTags(),
             'posts' => $category->posts()->recent()->paginate($this->postsPerPage),
-            'anotherCategories' => $this->sidebarCategories(function($query) use ($category) {
+            'sidebarCategories' => $this->sidebarCategories(function($query) use ($category) {
                 return $query->exclude($category->id);
             }),
-            'anotherPosts' => $this->sidebarPosts(function($query) use ($category) {
+            'sidebarPosts' => $this->sidebarPosts(function($query) use ($category) {
                 return $query->excludeByCategory($category->id);
             }),
             'category' => $category,
@@ -120,10 +120,10 @@ class BlogController extends \App\Http\Controllers\Controller
         return view('nova-blog::tag', [
             'categories' => $this->sidebarCategories(),
             'posts' => $tag->posts()->recent()->paginate($this->postsPerPage),
-            'anotherTags' => $this->sidebarTags(function($query) use ($tag) {
+            'sidebarTags' => $this->sidebarTags(function($query) use ($tag) {
                 return $query->exclude($tag->id);
             }),
-            'anotherPosts' => $this->sidebarPosts(function($query) use ($tag) {
+            'sidebarPosts' => $this->sidebarPosts(function($query) use ($tag) {
                 return $query->excludeByTag($tag->id);
             }),
             'tag' => $tag,

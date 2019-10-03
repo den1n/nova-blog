@@ -5,7 +5,9 @@
             <div class="blog-post-tags">
                 @forelse($tags as $t)
                     <span class="blog-post-tags-item">
-                        <a href="{{ route('nova-blog.tag', ['tag' => $t]) }}" title="{{ __('Posts by tag :name', ['name' => $t->name]) }}">#{{ $t->name }}</a>
+                        <a href="{{ route('nova-blog.tag', ['tag' => $t]) }}" title="{{ __('Posts with tag :name', ['name' => '#' . $t->name]) }}">
+                            #{{ $t->name }}
+                        </a>
                     </span>
                 @empty
                     <span>{{ __('Not found') }}</span>

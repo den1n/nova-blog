@@ -1,17 +1,19 @@
 @extends('nova-blog::layout')
 
-@section('title', __('Search result'))
+@section('title', __('Search Results'))
 
 @section('nova-blog-content')
     <div class="card blog-card">
-        <div class="card-header">{{ __('Search result') }}</div>
+        <div class="card-header">{{ __('Search Results') }}</div>
         <div class="card-body blog-post-list">
             @forelse($posts as $p)
                 @include('nova-blog::post', [
                     'post' => $p,
                 ])
             @empty
-                <div class="blog-notice">{{ __('Nothing found') }}.</div>
+                <div class="blog-notice">
+                    {{ __('Nothing found') }}.
+                </div>
             @endforelse
             {{ $posts->links() }}
         </div>
@@ -20,8 +22,7 @@
 
 @section('nova-blog-sidebar')
     @include('nova-blog::sidebar.posts', [
-        'title' => 'Another posts',
-        'posts' => $anotherPosts,
+        'posts' => $sidebarPosts,
     ])
     @include('nova-blog::sidebar.categories', [
         'categories' => $categories,
