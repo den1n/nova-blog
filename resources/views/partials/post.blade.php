@@ -1,5 +1,5 @@
 <div class="blog-post">
-    @include('nova-blog::info', [
+    @include('nova-blog::partials.info', [
         'post' => $post,
     ])
     <div class="blog-post-title">

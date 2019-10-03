@@ -7,7 +7,7 @@
         <div class="card-header">{{ __('Search Results') }}</div>
         <div class="card-body blog-post-list">
             @forelse($posts as $p)
-                @include('nova-blog::post', [
+                @include('nova-blog::partials.post', [
                     'post' => $p,
                 ])
             @empty

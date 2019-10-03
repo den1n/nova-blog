@@ -7,7 +7,7 @@
         <div class="card-header">{{ $category->name }}</div>
         <div class="card-body blog-post-list">
             @foreach($posts as $p)
-                @include('nova-blog::post', [
+                @include('nova-blog::partials.post', [
                     'post' => $p,
                 ])
             @endforeach

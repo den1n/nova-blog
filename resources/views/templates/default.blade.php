@@ -9,7 +9,7 @@
         <div class="card-header">{{ $post->title }}</div>
         <div class="card-body">
             <div class="blog-post">
-                @include('nova-blog::info', [
+                @include('nova-blog::partials.info', [
                     'post' => $post,
                 ])
                 <div class="blog-post-annotation">{!! $post->annotation !!}</div>

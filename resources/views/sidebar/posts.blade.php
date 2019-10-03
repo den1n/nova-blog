@@ -4,7 +4,7 @@
         <div class="card-body blog-post-list">
             @forelse($posts as $p)
                 <div class="blog-post">
-                    @include('nova-blog::info', [
+                    @include('nova-blog::partials.info', [
                         'post' => $p,
                     ])
                     <div class="blog-post-title">
