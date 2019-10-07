@@ -2,11 +2,16 @@
 
 namespace Den1n\NovaBlog;
 
+use Carbon\Carbon;
+use Closure;
 use Den1n\NovaBlog\Models\Category;
 use Den1n\NovaBlog\Models\Post;
 use Den1n\NovaBlog\Models\Tag;
 use Illuminate\Contracts\Support\Renderable;
-use Closure;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 class BlogController extends \App\Http\Controllers\Controller
 {
@@ -17,7 +22,9 @@ class BlogController extends \App\Http\Controllers\Controller
      */
     public function __construct()
     {
-        $this->postsPerPage = config('nova-blog.controller.posts_per_page');
+        $controller = config('nova-blog.controller');
+        session()->remove($controller['redirect_key']);
+        $this->postsPerPage = $controller['posts_per_page'];
     }
 
     /**
@@ -35,10 +42,10 @@ class BlogController extends \App\Http\Controllers\Controller
     /**
      * Show all posts filtered by search query.
      */
-    public function search()
+    public function search(Request $request)
     {
         if (config('nova-blog.controller.allow_searching')) {
-            $query = request()->input('query');
+            $query = $request->input('query');
             $posts = config('nova-blog.models.post')::search($query)
                 ->orderBy('published_at', 'desc')
                 ->usingWebSearchQuery();
@@ -57,7 +64,7 @@ class BlogController extends \App\Http\Controllers\Controller
     /**
      * Show post.
      */
-    public function show(Post $post): Renderable
+    public function post(Post $post): Renderable
     {
         if ($post->is_published or ($user = auth()->user() and $user->can('blogManager'))) {
             return view('nova-blog::templates.' . $post->template, [
@@ -128,6 +135,75 @@ class BlogController extends \App\Http\Controllers\Controller
             }),
             'tag' => $tag,
         ]);
+    }
+
+    /**
+     * Redirect user to login page.
+     */
+    public function login(Request $request): RedirectResponse
+    {
+        $controller = config('nova-blog.controller');
+        if ($next = $request->input('next'))
+            session()->put($controller['redirect_key'], $next);
+        return redirect()->route($controller['login_route']);
+    }
+
+    /**
+     * Get all comments for a post.
+     */
+    public function comments(Request $request): Collection
+    {
+        if ($post = config('nova-blog.models.post')::find($request->input('post_id'))) {
+            return $post->comments;
+        } else
+            throw new InvalidArgumentException('Invalid post');
+    }
+
+    /**
+     * Create comment.
+     */
+    public function commentsCreate(Request $request): Models\Comment
+    {
+        $models = config('nova-blog.models');
+        if ($post = $models['post']::find($request->input('post_id'))) {
+            if ($content = trim($request->content)) {
+                $comment = new $models['comment'];
+                $comment->content = $content;
+                $comment->post_id = $post->id;
+                $comment->save();
+                return $comment->load('author');
+            } else
+                throw new InvalidArgumentException('Empty content');
+        } else
+            throw new InvalidArgumentException('Invalid post');
+    }
+
+    /**
+     * Update comment.
+     */
+    public function commentsUpdate(Request $request): Models\Comment
+    {
+        if ($comment = config('nova-blog.models.comment')::find($request->input('comment_id'))) {
+            if ($content = trim($request->content)) {
+                $comment->content = $content;
+                $comment->save();
+                return $comment;
+            } else
+                throw new InvalidArgumentException('Empty content');
+        } else
+            throw new InvalidArgumentException('Invalid comment');
+    }
+
+    /**
+     * Remove comment.
+     */
+    public function commentsRemove(Request $request): Models\Comment
+    {
+        if ($comment = config('nova-blog.models.comment')::find($request->input('comment_id'))) {
+            $comment->delete();
+            return $comment;
+        } else
+            throw new InvalidArgumentException('Invalid comment');
     }
 
     /**

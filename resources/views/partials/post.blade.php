@@ -3,7 +3,7 @@
         'post' => $post,
     ])
     <div class="blog-post-title">
-        <a href="{{ route('nova-blog.show', ['post' => $post]) }}">
+        <a href="{{ route('nova-blog.post', ['post' => $post]) }}">
             {{ $post->title }}
         </a>
     </div>
@@ -12,7 +12,7 @@
             {!! $post->annotation !!}
         </div>
         <div class="blog-post-read-next">
-            <a href="{{ route('nova-blog.show', ['post' => $post]) }}">
+            <a href="{{ route('nova-blog.post', ['post' => $post]) }}">
                 {{ __('Read next') }}
             </a>
         </div>

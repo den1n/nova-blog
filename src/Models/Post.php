@@ -69,7 +69,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
      */
     public function getUrlAttribute(): string
     {
-        return route('nova-blog.show', [
+        return route('nova-blog.post', [
             'post' => $this,
         ]);
     }
@@ -176,7 +176,8 @@ class Post extends \Illuminate\Database\Eloquent\Model
      */
     public function comments()
     {
-        return $this->hasMany(config('nova-blog.models.comment'));
+        return $this->hasMany(config('nova-blog.models.comment'))
+            ->orderBy('created_at', 'asc');
     }
 
     /**

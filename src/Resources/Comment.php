@@ -84,12 +84,6 @@ class Comment extends Resource
             Number::make(__('Rating'), 'rating')
                 ->sortable(),
 
-            BelongsTo::make(__('Parent'), 'parent', $resources['comment'])
-                ->hideFromIndex()
-                ->nullable(),
-
-            HasMany::make(__('Answers'), 'answers', $resources['comment']),
-
             DateTime::make(__('Created At'), 'created_at')
                 ->hideWhenCreating()
                 ->hideWhenUpdating()

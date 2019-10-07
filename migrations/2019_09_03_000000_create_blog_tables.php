@@ -64,12 +64,10 @@ class CreateBlogTables extends Migration
             $table->increments('id');
             $table->string('content', 4000);
             $table->integer('rating')->nullable()->default(0);
-            $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('post_id')->unsigned();
             $table->bigInteger('author_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('parent_id')->references('id')->on($tables['comments'])->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
             $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
         });

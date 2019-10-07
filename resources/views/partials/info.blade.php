@@ -7,7 +7,7 @@
     <span class="blog-post-date" title="{{ __('Updated At') }}: {{ $post->updated_at->diffForHumans() }}">
         {{ $post->published_at->diffForHumans() }}
     </span>
-    <a class="blog-post-avatar" href="{{ route('nova-blog.author', ['id' => $post->author_id]) }}" title="{{ __('Posts by :author', ['author' => $post->author->name]) }}">
+    <a class="blog-post-avatar" href="{{ route('nova-blog.author', ['id' => $post->author->id]) }}" title="{{ __('Posts by :author', ['author' => $post->author->name]) }}">
         <img src="https://www.gravatar.com/avatar/{{ md5($post->author->email) }}?s=512" alt="{{ __('Avatar') }}">
     </a>
 </div>

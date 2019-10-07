@@ -14,25 +14,15 @@
                 ])
                 <div class="blog-post-annotation">{!! $post->annotation !!}</div>
                 <div class="blog-post-content">{!! $post->content !!}</div>
-                <div class="blog-post-tags">
-                    @foreach($post->tags as $t)
-                        <span class="blog-post-tags-item">
-                            <a href="{{ route('nova-blog.tag', ['tag' => $t]) }}" title="{{ __('Posts with tag :name', ['name' => '#' . $t->name]) }}">
-                                #{{ $t->name }}
-                            </a>
-                        </span>
-                    @endforeach
-                </div>
+                @include('nova-blog::partials.tags', [
+                    'tags' => $post->tags,
+                ])
             </div>
         </div>
     </div>
-    @if(config('nova-blog.controller.allow_commenting'))
-        <div class="card blog-card">
-            <div class="card-header">{{ __('Comments') }}</div>
-            <div class="card-body">
-            </div>
-        </div>
-    @endif
+    @include('nova-blog::partials.comments', [
+        'post' => $post,
+    ])
 @endsection
 
 @section('nova-blog-sidebar')

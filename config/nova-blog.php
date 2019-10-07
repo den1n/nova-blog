@@ -80,7 +80,7 @@ return [
         /**
          * Allow readers to comment on posts.
          */
-        'allow_commenting' => false,
+        'allow_commenting' => true,
 
         /**
          * Number of posts displayed on one page.
@@ -111,6 +111,19 @@ return [
          */
 
         'tags_on_sidebar' => 25,
+
+        /**
+         * Route to login controller.
+         */
+
+        'login_route' => 'login',
+
+        /**
+         * Name of session key for storing url to the post.
+         * You can use this key to redirect user back to post after it logged in.
+         */
+
+        'redirect_key' => 'nova-blog-redirect',
 
         /**
          * Array of templates used by controller.

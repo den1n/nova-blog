@@ -5,7 +5,7 @@
 @section('nova-blog-content')
     <div class="card blog-card">
         <div class="card-header">{{ $author->name }}</div>
-        <div class="card-body blog-post-list">
+        <div class="card-body blog-posts">
             @foreach($posts as $p)
                 @include('nova-blog::partials.post', [
                     'post' => $p,

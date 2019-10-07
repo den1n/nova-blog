@@ -50,9 +50,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             __DIR__ . '/../resources/views/templates' => resource_path('views/vendor/nova-blog/templates'),
         ], 'views');
 
-        $this->publishes([
-            __DIR__ . '/../dist' => public_path('vendor/nova-blog'),
-        ], 'public');
+        // $this->publishes([
+        //     __DIR__ . '/../dist' => public_path('vendor/nova-blog'),
+        // ], 'public');
     }
 
     /**
@@ -77,8 +77,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             Route::model('tag', config('nova-blog.models.tag'));
             Route::group([
                 'prefix' => $prefix,
-                'middleware' => ['web'],
                 'namespace' => '\\' . __NAMESPACE__,
+                'middleware' => ['web'],
             ], function () {
                 $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
                 Route::get('/', $controller . '@index')->where('int', '\d+')->name('nova-blog.index');
@@ -86,8 +86,21 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 Route::get('/author/{id}', $controller . '@author')->name('nova-blog.author');
                 Route::get('/category/{category}', $controller . '@category')->name('nova-blog.category');
                 Route::get('/tag/{tag}', $controller . '@tag')->name('nova-blog.tag');
-                Route::get('/{post}', $controller . '@show')->name('nova-blog.show');
+                Route::get('/login', $controller . '@login')->name('nova-blog.login');
+                Route::get('/{post}', $controller . '@post')->name('nova-blog.post');
             });
+        });
+
+        Route::group([
+            'prefix' => '/vendor/nova-blog',
+            'namespace' => '\\' . __NAMESPACE__,
+            'middleware' => ['web'],
+        ], function () {
+            $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
+            Route::get('/comments', $controller . '@comments')->name('nova-blog.comments');
+            Route::put('/comments', $controller . '@commentsCreate')->name('nova-blog.comments.create');
+            Route::post('/comments', $controller . '@commentsUpdate')->name('nova-blog.comments.update');
+            Route::delete('/comments', $controller . '@commentsRemove')->name('nova-blog.comments.remove');
         });
 
         $this->app->booted(function() {

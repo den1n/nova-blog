@@ -22,7 +22,18 @@ This will publish the following resources:
 * Migration file `database/migrations/*_create_blog_tables.php`
 * Translations `resources/lang/vendor/nova-blog`
 * Views `resources/views/vendor/nova-blog`
-* Public assets `public/vendor/nova-blog`.
+
+Add `Vue` components provided by the package to file `resources\js\app.js` before `Vue` initialization.
+
+```js
+require('../../vendor/den1n/nova-blog/resources/js');
+```
+
+Add `CSS` styles provided by the package to file `resources\sass\app.scss`.
+
+```scss
+@import '../../vendor/den1n/nova-blog/resources/sass';
+```
 
 Migrate database.
 
@@ -30,7 +41,7 @@ Migrate database.
 php artisan migrate
 ```
 
-Add instance of class `Den1n\NovaBlog\Tool` to your `App\Providers\NovaServiceProvider::tools()` method to display the blog posts, categories and tags within your Nova resources.
+Add instance of class `Den1n\NovaBlog\Tool` to your `App\Providers\NovaServiceProvider::tools()` method to display the blog posts, comments, categories and tags within your Nova resources.
 
 ```php
 /**
@@ -63,14 +74,14 @@ Route::novaBlogRoutes('/blog');
 You can get url to existing post by using Laravel `route` helper.
 
 ```php
-use \Den1n\NovaPosts\Post;
+use \Den1n\NovaPosts\Models\Post;
 
-$url = route('nova-blog.show', [
+$url = route('nova-blog.post', [
     'post' => Post::find(1),
 ]);
 
 // Or you can pass a post slug.
-$url = route('nova-blog.show', [
+$url = route('nova-blog.post', [
     'post' => 'my-post-slug',
 ]);
 ```
