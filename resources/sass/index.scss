@@ -196,6 +196,7 @@
 
     .blog-comment-controls {
         display: flex;
+        flex-wrap: wrap;
 
         a {
             margin-right: .5rem;
@@ -206,21 +207,20 @@
         }
     }
 
-    .blog-comment-quote {
-        border-left: 3px solid var(--primary);
-        margin: .5rem 0 .5rem 0;
-        padding-left: .75rem;
-    }
+    .blog-comment-content,
+    .blog-comment-form-editor {
+        blockquote {
+            border-left: 3px solid var(--primary);
+            margin: .5rem 0 .5rem 0;
+            padding-left: .75rem;
+        }
 
-    .blog-comment-content img {
-        margin: .5rem 0 .5rem 0;
-    }
-
-    .blog-comment-video {
-        max-width: 100%;
-        margin: .5rem 0 .5rem 0;
+        img {
+            margin: .5rem 0 .5rem 0;
+        }
 
         iframe {
+            margin: .5rem 0 .5rem 0;
             width: 100%;
             height: 350px;
 
@@ -252,9 +252,7 @@
                 outline: none;
 
 
-                &:active,
-                &:focus,
-                &:hover {
+                &:active, &:focus, &:hover {
                     background-color: rgba(0, 0, 0, 0.03);
                 }
 

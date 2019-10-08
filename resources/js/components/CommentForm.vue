@@ -107,6 +107,23 @@ export default {
                 });
         },
 
+        handleToolbar(e) {
+            const target = e.target.closest('[data-command]');
+            if (target) {
+                const command = target.dataset.command;
+                const methodName = 'handleToolbar' + command.charAt(0).toUpperCase() + command.slice(1);
+                if (typeof this[methodName] === 'function') {
+                    const selection = window.getSelection();
+                    this[methodName]({
+                        inBounds: this.editor.contains(selection.anchorNode),
+                        range: selection.rangeCount ? selection.getRangeAt(0) : document.createRange(),
+                        selection,
+                    });
+                    this.focus();
+                }
+            }
+        },
+
         handleToolbarBold(options) {
             if (options.inBounds)
                 document.execCommand('bold');
@@ -125,9 +142,7 @@ export default {
         handleToolbarQuote(options) {
             if (options.inBounds && options.selection.toString()) {
                 const br = document.createElement('br');
-                const quote = document.createElement('blockquote');
-                quote.className = 'blog-comment-quote';
-                options.range.surroundContents(quote);
+                options.range.surroundContents(document.createElement('blockquote'));
                 options.range.collapse();
                 options.range.insertNode(br);
                 options.range.selectNodeContents(br);
@@ -165,14 +180,13 @@ export default {
             if (video && video.trim()) {
                 const div = document.createElement('div');
                 div.insertAdjacentHTML('beforeend', video);
-                div.className = "blog-comment-video";
                 const iframe = div.querySelector('iframe');
                 if (iframe && iframe instanceof HTMLIFrameElement) {
                     iframe.removeAttribute('height');
                     iframe.removeAttribute('width');
                 }
                 options.range.extractContents();
-                options.range.insertNode(div);
+                options.range.insertNode(iframe);
                 options.range.collapse();
             }
         },
@@ -209,7 +223,6 @@ export default {
 
             const br = document.createElement('br');
             const quote = document.createElement('blockquote');
-            quote.className = 'blog-comment-quote';
             quote.append(reply);
             quote.append(options.quote);
             this.editor.append(quote);
@@ -222,23 +235,6 @@ export default {
             selection.addRange(range);
             range.collapse();
             this.focus(true);
-        },
-
-        handleToolbar(e) {
-            const target = e.target.closest('[data-command]');
-            if (target) {
-                const command = target.dataset.command;
-                const methodName = 'handleToolbar' + command.charAt(0).toUpperCase() + command.slice(1);
-                if (typeof this[methodName] === 'function') {
-                    const selection = window.getSelection();
-                    this[methodName]({
-                        inBounds: this.editor.contains(selection.anchorNode),
-                        range: selection.rangeCount ? selection.getRangeAt(0) : document.createRange(),
-                        selection,
-                    });
-                    this.focus();
-                }
-            }
         },
 
         handleShortcut(e) {
