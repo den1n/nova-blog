@@ -57,7 +57,6 @@
 <script>
 import Lang from '../Mixins/Lang';
 import EventBus from '../Mixins/EventBus';
-import md5 from 'js-md5';
 
 export default {
     props: {

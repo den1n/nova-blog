@@ -13,6 +13,7 @@ class Comment extends \Illuminate\Database\Eloquent\Model
     ];
 
     protected $appends = [
+        'gravatar_id',
         'readable_created_at',
         'readable_updated_at',
     ];
@@ -27,6 +28,14 @@ class Comment extends \Illuminate\Database\Eloquent\Model
     public function getTable(): string
     {
         return config('nova-blog.tables.comments', parent::getTable());
+    }
+
+    /**
+     * Get value of readable_created_at attribute.
+     */
+    public function getGravatarIdAttribute(): string
+    {
+        return md5($this->author->email);
     }
 
     /**

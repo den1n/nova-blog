@@ -15,7 +15,6 @@
         "laravel-nova": "^1.0"
     },
     "dependencies": {
-        "js-md5": "^0.7.3",
         "vue": "^2.5.0"
     }
 }

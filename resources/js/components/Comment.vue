@@ -29,7 +29,6 @@
 <script>
 import Lang from '../Mixins/Lang';
 import EventBus from '../Mixins/EventBus';
-import md5 from 'js-md5';
 
 export default {
     props: {
@@ -60,7 +59,7 @@ export default {
         },
 
         gravatarUrl() {
-            return `https://www.gravatar.com/avatar/${md5(this.comment.author.email)}?s=512`;
+            return `https://www.gravatar.com/avatar/${this.comment.gravatar_id}?s=512`;
         },
 
         dateHint() {

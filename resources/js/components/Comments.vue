@@ -18,7 +18,6 @@
 
 <script>
 import Lang from '../Mixins/Lang';
-import md5 from 'js-md5';
 
 export default {
     props: {
@@ -39,7 +38,7 @@ export default {
 
         gravatarUrl() {
             if (this.hasUser) {
-                return `https://www.gravatar.com/avatar/${md5(this.user.email)}?s=512`;
+                return `https://www.gravatar.com/avatar/${this.user.gravatar_id}?s=512`;
             } else
                 return `https://www.gravatar.com/avatar?s=512`;
         },
