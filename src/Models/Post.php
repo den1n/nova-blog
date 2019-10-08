@@ -20,6 +20,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
     protected $appends = [
         'is_published',
+        'is_updated',
         'url',
     ];
 
@@ -62,6 +63,14 @@ class Post extends \Illuminate\Database\Eloquent\Model
     public function getIsPublishedAttribute (): bool
     {
         return now() >= $this->published_at;
+    }
+
+    /**
+     * Get value of is_updated attribute.
+     */
+    public function getIsUpdatedAttribute (): bool
+    {
+        return $this->created_at < $this->updated_at;
     }
 
     /**

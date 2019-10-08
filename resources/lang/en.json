@@ -17,7 +17,6 @@
     "Published At": "Published At",
     "Owner": "Owner",
     "Status": "Status",
-    "Rating": "Rating",
     "Post": "Post",
     "Posts": "Posts",
     "Category": "Category",
@@ -68,7 +67,7 @@
     "Update": "Update",
     "Remove": "Remove",
     "Cancel": "Cancel",
-    "Remove your comment?": "Remove your comment?",
+    "Remove the comment?": "Remove the comment?",
     "Has been updated": "Has been updated",
 
     "blogManager": "Blog: Manager",

@@ -81,9 +81,6 @@ class Comment extends Resource
             $this->makeEditorField(__('Content'), 'content')
                 ->rules('required', 'string:4000'),
 
-            Number::make(__('Rating'), 'rating')
-                ->sortable(),
-
             DateTime::make(__('Created At'), 'created_at')
                 ->hideWhenCreating()
                 ->hideWhenUpdating()

@@ -4,7 +4,14 @@
             {{ $post->category->name }}
         </a>
     </span>
-    <span class="blog-post-date" title="{{ __('Updated At') }}: {{ $post->updated_at->diffForHumans() }}">
+    @php
+
+        $updatedTitle = $post->is_updated
+            ? sprintf('title="%s: %s', __('Has been updated'), $post->updated_at->diffForHumans())
+            : '';
+
+    @endphp
+    <span class="blog-post-date" {{ $updatedTitle }}>
         {{ $post->published_at->diffForHumans() }}
     </span>
     <a class="blog-post-avatar" href="{{ route('nova-blog.author', ['id' => $post->author->id]) }}" title="{{ __('Posts by :author', ['author' => $post->author->name]) }}">

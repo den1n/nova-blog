@@ -63,7 +63,6 @@ class CreateBlogTables extends Migration
         Schema::create($tables['comments'], function (Blueprint $table) use ($tables) {
             $table->increments('id');
             $table->string('content', 4000);
-            $table->integer('rating')->nullable()->default(0);
             $table->integer('post_id')->unsigned();
             $table->bigInteger('author_id')->unsigned();
             $table->timestamps();

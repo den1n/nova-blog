@@ -8,11 +8,8 @@ class Comment extends \Illuminate\Database\Eloquent\Model
         'id',
     ];
 
-    protected $attributes = [
-        'rating' => 0,
-    ];
-
     protected $appends = [
+        'is_updated',
         'gravatar_id',
         'readable_created_at',
         'readable_updated_at',
@@ -31,7 +28,15 @@ class Comment extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Get value of readable_created_at attribute.
+     * Get value of is_updated attribute.
+     */
+    public function getIsUpdatedAttribute (): bool
+    {
+        return $this->created_at < $this->updated_at;
+    }
+
+    /**
+     * Get value of gravatar_id attribute.
      */
     public function getGravatarIdAttribute(): string
     {

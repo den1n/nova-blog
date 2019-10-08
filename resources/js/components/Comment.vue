@@ -12,8 +12,8 @@
             <div class="blog-comment-controls" v-if="user.id">
                 <a href="#reply" v-if="!isAuthor" @click.prevent="handleReply">{{ t('Reply') }}</a>
                 <a href="#quote" @click.prevent="handleQuote">{{ t('To quote') }}</a>
-                <a href="#update" v-if="isAuthor" @click.prevent="handleUpdating">{{ t('Update') }}</a>
-                <a href="#remove" v-if="isAuthor" @click.prevent="handleRemove">{{ t('Remove') }}</a>
+                <a href="#update" v-if="isAuthor || user.can_update_comments" @click.prevent="handleUpdating">{{ t('Update') }}</a>
+                <a href="#remove" v-if="isAuthor || user.can_delete_comments" @click.prevent="handleRemove">{{ t('Remove') }}</a>
             </div>
         </div>
         <nova-blog-comment-form v-if="updating"
@@ -63,7 +63,7 @@ export default {
         },
 
         dateHint() {
-            if (Date.parse(this.comment.created_at) < Date.parse(this.comment.updated_at))
+            if (this.comment.is_updated)
                 return `${this.t('Has been updated')}: ${this.comment.readable_updated_at}`;
         },
 
@@ -103,7 +103,7 @@ export default {
         },
 
         handleRemove(e) {
-            if (confirm(this.t('Remove your comment?'))) {
+            if (confirm(this.t('Remove the comment?'))) {
                 const data = { comment_id: this.comment.id };
                 window.axios.delete('/vendor/nova-blog/comments', { data })
                     .then(response => {

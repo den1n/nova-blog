@@ -17,7 +17,6 @@
     "Published At": "Дата публикации",
     "Owner": "Владелец",
     "Status": "Состояние",
-    "Rating": "Рейтинг",
     "Post": "Заметка",
     "Posts": "Заметки",
     "Category": "Категория",
@@ -68,7 +67,7 @@
     "Update": "Обновить",
     "Remove": "Удалить",
     "Cancel": "Отмена",
-    "Remove your comment?": "Удалить ваш комментарий?",
+    "Remove the comment?": "Удалить комментарий?",
     "Has been updated": "Был обновлен",
 
     "blogManager": "Блог: Менеджер",

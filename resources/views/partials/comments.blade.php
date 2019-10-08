@@ -5,8 +5,13 @@
             @php
 
                 $userAttributes = [];
-                if ($user = auth()->user())
-                    $userAttributes = array_merge($user->toArray(), ['gravatar_id' => md5($user->email)]);
+                if ($user = auth()->user()) {
+                    $userAttributes = array_merge($user->toArray(), [
+                        'can_update_comments' => $user->can('blogUpdateComments'),
+                        'can_delete_comments' => $user->can('blogDeleteComments'),
+                        'gravatar_id' => md5($user->email),
+                    ]);
+                }
 
             @endphp
             <nova-blog-comments :post="{{ $post }}" :comments="{{ $post->comments }}" :user="{{ json_encode((object)$userAttributes) }}" locale="{{ app()->getLocale() }}">
