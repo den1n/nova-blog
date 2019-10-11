@@ -2,11 +2,13 @@
     <div class="blog-comment" v-if="!deleted">
         <img class="blog-comment-avatar" :src="gravatarUrl" :alt="t('Avatar')">
         <div class="blog-comment-body" v-if="!updating">
-            <span class="blog-comment-anchor" :id="commentId"></span>
+            <span class="blog-comment-anchor" :id="commentAnchor"></span>
             <div class="blog-comment-info">
                 <span class="blog-comment-author">{{ comment.author.name }}</span>
-                <span class="blog-comment-date" :title="dateHint">{{ comment.readable_created_at }}</span>
-                <a class="blog-comment-link" :href="'#' + commentId" :title="t('Link to comment')">#</a>
+                <a class="blog-comment-date" :title="dateHint" :href="'#' + commentAnchor">
+                    {{ comment.readable_created_at }}
+                </a>
+
             </div>
             <div class="blog-comment-content" v-html="comment.content"></div>
             <div class="blog-comment-controls" v-if="user.id">
@@ -17,8 +19,9 @@
             </div>
         </div>
         <nova-blog-comment-form v-if="updating"
-            :post="post"
-            :comment="comment"
+            :postId="post.id"
+            :commentId="comment.id"
+            :commentContent="comment.content"
             :locale="locale"
             @updated="handleUpdated"
             @cancel="handleCancel"
@@ -27,14 +30,15 @@
 </template>
 
 <script>
-import Lang from '../Mixins/Lang';
-import EventBus from '../Mixins/EventBus';
+import Lang from '../mixins/Lang';
+import EventBus from '../mixins/EventBus';
 
 export default {
     props: {
         post: Object,
         comment: Object,
         user: Object,
+        createForm: Object,
     },
 
     data() {
@@ -50,8 +54,8 @@ export default {
     ],
 
     computed: {
-        commentId() {
-            return `comment-anchor-${this.comment.id}`;
+        commentAnchor() {
+            return `comment-${this.comment.id}`;
         },
 
         isAuthor() {
@@ -75,7 +79,8 @@ export default {
     methods: {
         handleReply(e) {
             this.eventBus.$emit('nova-blog.comments.reply', {
-                comment: this.comment,
+                commentAuthor: this.comment.author.name,
+                commentId: this.comment.id,
             });
         },
 
@@ -86,8 +91,9 @@ export default {
                 range.selectNodeContents(this.commentContent);
 
             this.eventBus.$emit('nova-blog.comments.quote', {
-                comment: this.comment,
                 quote: range.cloneContents(),
+                commentAuthor: this.comment.author.name,
+                commentId: this.comment.id,
             });
         },
 

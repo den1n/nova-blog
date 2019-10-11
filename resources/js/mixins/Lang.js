@@ -17,7 +17,7 @@ export default {
 
     methods: {
         t(text) {
-            if (this.lang[this.locale]) {
+            if (this.lang && this.lang[this.locale]) {
                 return this.lang[this.locale][text] || text;
             } else
                 return text;

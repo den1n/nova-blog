@@ -26,13 +26,13 @@ This will publish the following resources:
 Add `Vue` components provided by the package to file `resources\js\app.js` before `Vue` initialization.
 
 ```js
-require('../../vendor/den1n/nova-blog/resources/js');
+require('../../vendor/den1n/nova-blog/dist');
 ```
 
 Add `CSS` styles provided by the package to file `resources\sass\app.scss`.
 
 ```scss
-@import '../../vendor/den1n/nova-blog/resources/sass';
+@import '../../vendor/den1n/nova-blog/dist';
 ```
 
 Migrate database.

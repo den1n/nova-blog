@@ -42,31 +42,32 @@
                 </svg>
             </button>
         </div>
-        <div class="blog-comment-form-editor" contenteditable="true" @keydown="handleShortcut" v-html="comment ? comment.content : ''">
-        </div>
+        <div class="blog-comment-form-editor" contenteditable="true" @keydown="handleShortcut" @input="handleChanges" v-html="commentContent"></div>
         <div class="blog-comment-form-notice" v-if="notice">{{ notice }}</div>
-        <button type="submit" class="btn btn-primary" title="Ctrl + Enter" :disabled="busy" @click.prevent="handleSubmit">
-            {{ comment ? t('Update') : t('Submit') }}
+        <button type="submit" class="btn btn-primary" title="Ctrl + Enter" :disabled="!canSubmit" @click.prevent="handleSubmit">
+            {{ commentId ? t('Update') : t('Submit') }}
         </button>
-        <button type="reset" class="btn btn-secondary" v-if="comment" @click.prevent="handleCancel">
+        <button type="reset" class="btn btn-link" v-if="commentId" @click.prevent="handleCancel">
             {{ t('Cancel') }}
         </button>
     </form>
 </template>
 
 <script>
-import Lang from '../Mixins/Lang';
-import EventBus from '../Mixins/EventBus';
+import Lang from '../mixins/Lang';
+import EventBus from '../mixins/EventBus';
 
 export default {
     props: {
-        post: Object,
-        comment: Object,
+        postId: Number,
+        commentId: Number,
+        commentContent: String,
     },
 
     data() {
         return {
             busy: false,
+            hasContent: false,
             notice: '',
         };
     },
@@ -77,9 +78,12 @@ export default {
     ],
 
     computed: {
-
         editor() {
             return this.$el.querySelector('[contenteditable]');
+        },
+
+        canSubmit() {
+            return !this.busy && this.hasContent;
         },
     },
 
@@ -91,7 +95,7 @@ export default {
         },
 
         create() {
-            const data = { post_id: this.post.id, content: this.editor.innerHTML };
+            const data = { post_id: this.postId, content: this.editor.innerHTML };
             return window.axios.put('/vendor/nova-blog/comments', data)
                 .then(response => {
                     this.$emit('created', response.data);
@@ -100,7 +104,7 @@ export default {
         },
 
         update() {
-            const data = { post_id: this.post.id, comment_id: this.comment.id, content: this.editor.innerHTML };
+            const data = { post_id: this.postId, comment_id: this.commentId, content: this.editor.innerHTML };
             return window.axios.post('/vendor/nova-blog/comments', data)
                 .then(response => {
                     this.$emit('updated', response.data);
@@ -192,12 +196,12 @@ export default {
         },
 
         handleReply(options) {
-            let reply = this.editor.querySelector('a[href="#comment-anchor-' + options.comment.id + '"]')
+            let reply = this.editor.querySelector('a[href="#comment-' + options.commentId + '"]')
             if (!reply) {
                 reply = document.createElement('a');
                 reply.className = 'blog-comment-reply-link';
-                reply.innerText = '@' + options.comment.author.name;
-                reply.href = '#comment-anchor-' + options.comment.id;
+                reply.innerText = '@' + options.commentAuthor;
+                reply.href = '#comment-' + options.commentId;
 
                 const links = this.editor.querySelectorAll('.blog-comment-reply-link');
                 if (links && links.length) {
@@ -218,8 +222,8 @@ export default {
         handleQuote(options) {
             const reply = document.createElement('a');
             reply.className = 'blog-comment-quote-reply-link';
-            reply.innerText = '@' + options.comment.author.name;
-            reply.href = '#comment-anchor-' + options.comment.id;
+            reply.innerText = '@' + options.commentAuthor;
+            reply.href = '#comment-' + options.commentId;
 
             const br = document.createElement('br');
             const quote = document.createElement('blockquote');
@@ -237,6 +241,13 @@ export default {
             this.focus(true);
         },
 
+        handleChanges(e) {
+            this.hasContent = (
+                   this.editor.innerText.trim()
+                || this.editor.querySelectorAll('img, iframe').length
+            );
+        },
+
         handleShortcut(e) {
             if (!this.busy && e.ctrlKey && e.key === 'Enter') {
                 this.handleSubmit();
@@ -249,7 +260,7 @@ export default {
             const hasContent = this.editor.innerText.trim() || this.editor.querySelectorAll('img, .blog-comment-video').length;
             if (!this.busy && hasContent) {
                 this.busy = true;
-                const methodName = this.comment ? 'update' : 'create';
+                const methodName = this.commentId ? 'update' : 'create';
                 if (typeof this[methodName] === 'function') {
                     this[methodName]()
                         .catch(e => this.notice = this.t('Failed to send your comment. Please try again later.'))
@@ -265,7 +276,7 @@ export default {
     },
 
     mounted() {
-        if (!this.comment) {
+        if (!this.commentId) {
             this.eventBus.$on('nova-blog.comments.reply', this.handleReply);
             this.eventBus.$on('nova-blog.comments.quote', this.handleQuote);
         }

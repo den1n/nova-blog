@@ -10,14 +10,14 @@
         ></nova-blog-comment>
         <div class="blog-comment">
             <img class="blog-comment-avatar" :src="gravatarUrl" :alt="t('Avatar')">
-            <nova-blog-comment-form v-if="hasUser" :post="post" :user="user" :locale="locale" @created="handleCreated"></nova-blog-comment-form>
+            <nova-blog-comment-form v-if="hasUser" :postId="post.id" :locale="locale" @created="handleCreated"></nova-blog-comment-form>
             <slot v-if="!hasUser"></slot>
         </div>
     </div>
 </template>
 
 <script>
-import Lang from '../Mixins/Lang';
+import Lang from '../mixins/Lang';
 
 export default {
     props: {

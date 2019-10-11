@@ -4,7 +4,7 @@
         padding: 0;
 
         .card-header {
-            font-size: $h3-font-size;
+            font-size: 1.75rem;
         }
 
         .card-body {
@@ -148,7 +148,7 @@
         max-height: 48px;
         max-width: 48px;
 
-        @include media-breakpoint-down(xs) {
+        @media (max-width: 575.98px) {
             max-height: 32px;
             max-width: 32px;
         }
@@ -171,7 +171,7 @@
     .blog-comment-date {
         margin-left: auto;
 
-        @include media-breakpoint-down(xs) {
+        @media (max-width: 575.98px) {
             display: none;
         }
     }
@@ -179,13 +179,17 @@
     .blog-comment-link {
         margin-left: 1rem;
 
-        @include media-breakpoint-down(xs) {
+        @media (max-width: 575.98px) {
             margin-left: auto;
         }
     }
 
     .blog-comment-content {
         margin-bottom: .5rem;
+
+        div br:last-child {
+            display: none;
+        }
     }
 
     .blog-comment-reply-link,
@@ -202,15 +206,15 @@
             margin-right: .5rem;
         }
 
-        @include media-breakpoint-down(xs) {
-            font-size: $small-font-size;
+        @media (max-width: 575.98px) {
+            font-size: 80%;
         }
     }
 
     .blog-comment-content,
     .blog-comment-form-editor {
         blockquote {
-            border-left: 3px solid var(--primary);
+            border-left: 3px solid var(--primary, #007bff);
             margin: .5rem 0 .5rem 0;
             padding-left: .75rem;
         }
@@ -224,7 +228,7 @@
             width: 100%;
             height: 350px;
 
-            @include media-breakpoint-down(xs) {
+            @media (max-width: 575.98px) {
                 height: auto;
             }
         }
@@ -257,25 +261,25 @@
                 }
 
                 &:active {
-                    background-color: var(--primary);
+                    background-color: var(--primary, #007bff);
                 }
             }
 
             span:empty {
-                border-left: $border-width solid $border-color;
+                border-left: 1px solid #dee2e6;
             }
         }
 
         .blog-comment-form-editor {
             background-color: white;
-            border: $border-width solid $border-color;
+            border: 1px solid #dee2e6;
             margin-bottom: .5rem;
             min-height: 100px;
             padding: .5rem;
         }
 
         .blog-comment-form-notice {
-            color: var(--danger);
+            color: var(--danger, #dc3545);
             margin-bottom: .5rem;
         }
     }
