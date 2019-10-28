@@ -76,7 +76,7 @@ class Category extends Resource
      */
     public static function uriKey(): string
     {
-        return 'categories';
+        return 'nova-blog-categories';
     }
 
     /**

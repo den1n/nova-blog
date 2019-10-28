@@ -180,7 +180,7 @@ class Post extends Resource
      */
     public static function uriKey(): string
     {
-        return 'posts';
+        return 'nova-blog-posts';
     }
 
     /**

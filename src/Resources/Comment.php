@@ -103,7 +103,7 @@ class Comment extends Resource
      */
     public static function uriKey(): string
     {
-        return 'comments';
+        return 'nova-blog-comments';
     }
 
     /**

@@ -16,6 +16,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishResources();
         $this->loadTranslations();
         $this->loadRoutes();
+        $this->loadViews();
 
         $models = config('nova-blog.models');
         $models['post']::observe(Observers\Post::class);
@@ -60,7 +61,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function loadTranslations(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-blog');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'nova-blog');
         $this->loadJSONTranslationsFrom(__DIR__ . '/../resources/lang');
         $this->loadJsonTranslationsFrom(resource_path('lang/vendor/nova-blog'));
@@ -113,6 +113,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 });
             }
         });
+    }
+
+    /**
+     *  Load package views.
+     */
+    protected function loadViews(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-blog');
     }
 
     /**

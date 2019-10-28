@@ -76,7 +76,7 @@ class Tag extends Resource
      */
     public static function uriKey(): string
     {
-        return 'tags';
+        return 'nova-blog-tags';
     }
 
     /**
