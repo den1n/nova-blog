@@ -53,9 +53,9 @@ class Resource extends \Laravel\Nova\Resource
     /**
      * Create a validator instance for a resource update request.
      */
-    public static function validatorForUpdate(NovaRequest $request): Validator
+    public static function validatorForUpdate(NovaRequest $request, $resource = null): Validator
     {
-        return ValidatorFacade::make($request->all(), static::rulesForUpdate($request), [],
+        return ValidatorFacade::make($request->all(), static::rulesForUpdate($request, $resource), [],
             trans('nova-blog::validation.attributes')
         )->after(function ($validator) use ($request) {
             static::afterValidation($request, $validator);
