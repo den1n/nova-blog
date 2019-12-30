@@ -25,10 +25,12 @@ class Tags extends \Laravel\Nova\Fields\Field
             $tagModel = config('nova-blog.models.tag');
             $tagNames = array_filter(explode('|', $request[$requestAttribute]));
             $tags = $tagModel::whereIn('name', $tagNames)->get();
+
             foreach ($tagNames as $name) {
                 if (!$tags->contains('name', $name))
                     $tags->push($tagModel::create(['name' => $name]));
             }
+
             $model->tags()->sync($tags->pluck('id'));
         });
     }

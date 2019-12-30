@@ -36,7 +36,7 @@
                 </svg>
             </button>
             <span></span>
-            <button href="#quote" data-command="quote" :title="t('To quote')">
+            <button href="#quote" data-command="quote" :title="t('Quote')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M18.75 15c-2.899 0-5.25-2.351-5.25-5.25s2.351-5.25 5.25-5.25 5.25 2.351 5.25 5.25l0.023 0.75c0 5.799-4.701 10.5-10.5 10.5v-3c2.003 0 3.887-0.78 5.303-2.197 0.273-0.273 0.522-0.563 0.746-0.868-0.268 0.042-0.543 0.064-0.823 0.064zM5.25 15c-2.899 0-5.25-2.351-5.25-5.25s2.351-5.25 5.25-5.25 5.25 2.351 5.25 5.25l0.023 0.75c0 5.799-4.701 10.5-10.5 10.5v-3c2.003 0 3.887-0.78 5.303-2.197 0.273-0.273 0.522-0.563 0.746-0.868-0.268 0.042-0.543 0.064-0.823 0.064z"></path>
                 </svg>
@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import Lang from '../mixins/Lang';
-import EventBus from '../mixins/EventBus';
+import Lang from './Lang';
+import EventBus from './EventBus';
 
 export default {
     props: {
@@ -96,6 +96,7 @@ export default {
 
         create() {
             const data = { post_id: this.postId, content: this.editor.innerHTML };
+
             return window.axios.put('/vendor/nova-blog/comments', data)
                 .then(response => {
                     this.$emit('created', response.data);
@@ -105,6 +106,7 @@ export default {
 
         update() {
             const data = { post_id: this.postId, comment_id: this.commentId, content: this.editor.innerHTML };
+
             return window.axios.post('/vendor/nova-blog/comments', data)
                 .then(response => {
                     this.$emit('updated', response.data);
@@ -113,9 +115,11 @@ export default {
 
         handleToolbar(e) {
             const target = e.target.closest('[data-command]');
+
             if (target) {
                 const command = target.dataset.command;
                 const methodName = 'handleToolbar' + command.charAt(0).toUpperCase() + command.slice(1);
+
                 if (typeof this[methodName] === 'function') {
                     const selection = window.getSelection();
                     this[methodName]({
@@ -158,6 +162,7 @@ export default {
 
         handleToolbarLink(options) {
             const link = prompt(this.t('Enter link URL to insert'));
+
             if (link && link.trim()) {
                 const a = document.createElement('a');
                 a.target = '_blank';
@@ -170,6 +175,7 @@ export default {
 
         handleToolbarImage(options) {
             const image = prompt(this.t('Enter image URL to insert'));
+
             if (image && image.trim()) {
                 const img = document.createElement('img');
                 img.src = image;
@@ -181,14 +187,17 @@ export default {
 
         handleToolbarVideo(options) {
             const video = prompt(this.t('Enter the video code to insert'));
+
             if (video && video.trim()) {
                 const div = document.createElement('div');
                 div.insertAdjacentHTML('beforeend', video);
                 const iframe = div.querySelector('iframe');
+
                 if (iframe && iframe instanceof HTMLIFrameElement) {
                     iframe.removeAttribute('height');
                     iframe.removeAttribute('width');
                 }
+
                 options.range.extractContents();
                 options.range.insertNode(iframe);
                 options.range.collapse();
@@ -197,6 +206,7 @@ export default {
 
         handleReply(options) {
             let reply = this.editor.querySelector('a[href="#comment-' + options.commentId + '"]')
+
             if (!reply) {
                 reply = document.createElement('a');
                 reply.className = 'blog-comment-reply-link';
@@ -204,6 +214,7 @@ export default {
                 reply.href = '#comment-' + options.commentId;
 
                 const links = this.editor.querySelectorAll('.blog-comment-reply-link');
+
                 if (links && links.length) {
                     links[links.length - 1].after(reply);
                 } else
@@ -258,9 +269,11 @@ export default {
         handleSubmit() {
             this.notice = '';
             const hasContent = this.editor.innerText.trim() || this.editor.querySelectorAll('img, .blog-comment-video').length;
+
             if (!this.busy && hasContent) {
                 this.busy = true;
                 const methodName = this.commentId ? 'update' : 'create';
+
                 if (typeof this[methodName] === 'function') {
                     this[methodName]()
                         .catch(e => this.notice = this.t('Failed to send your comment. Please try again later.'))

@@ -22,17 +22,19 @@ This will publish the following resources:
 * Migration file `database/migrations/*_create_blog_tables.php`
 * Translations `resources/lang/vendor/nova-blog`
 * Views `resources/views/vendor/nova-blog`
+* JavaScript assets `resources/js/vendor/nova-blog`
+* CSS assets `resources/sass/vendor/nova-blog`
 
-Add `Vue` components provided by the package to file `resources\js\app.js` before `Vue` initialization.
+Add `noba-blog` components provided by the package to file `resources\js\app.js` before `Vue` initialization.
 
 ```js
-require('../../vendor/den1n/nova-blog/dist');
+require('./vendor/nova-blog');
 ```
 
-Add `CSS` styles provided by the package to file `resources\sass\app.scss`.
+Add `noba-blog` styles provided by the package to file `resources\sass\app.scss`.
 
 ```scss
-@import '../../vendor/den1n/nova-blog/dist';
+@import './vendor/nova-blog';
 ```
 
 Migrate database.

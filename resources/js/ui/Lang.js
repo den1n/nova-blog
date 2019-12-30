@@ -1,5 +1,5 @@
 const lang = {};
-const files = require.context('../../lang', false, /\.json$/i);
+const files = require.context('../../../lang/vendor/nova-blog', false, /\.json$/i);
 files.keys().map(key => {
     lang[key.split('/').pop().split('.')[0]] = files(key);
 });

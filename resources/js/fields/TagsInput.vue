@@ -38,8 +38,8 @@
 export default {
     props: {
         name: String,
-        tags: { required: true },
-        limit: { default: 8 },
+        tags: String,
+        limit: { type: Number, default: 8 },
         errors: Object,
     },
 
@@ -63,6 +63,7 @@ export default {
         fetch() {
             if (this.input && this.limit) {
                 let query = `?tag=${this.input}&limit=${this.limit}`;
+
                 window.axios.get(`/nova-vendor/den1n/nova-blog/tags/field${query}`).then(response => {
                     if (this.input) {
                         this.suggestions = response.data.filter(suggestion => {
@@ -86,6 +87,7 @@ export default {
 
         add() {
             const input = this.input.trim();
+
             if (input.length && !this.tags.includes(input)) {
                 this.emitInput([...this.tags, input]);
                 this.clear();

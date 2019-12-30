@@ -8,15 +8,17 @@
     <div class="card blog-card">
         <div class="card-header">{{ $post->title }}</div>
         <div class="card-body">
-            <div class="blog-post">
-                @include('nova-blog::partials.info', [
-                    'post' => $post,
-                ])
-                <div class="blog-post-annotation">{!! $post->annotation !!}</div>
-                <div class="blog-post-content">{!! $post->content !!}</div>
-                @include('nova-blog::partials.tags', [
-                    'tags' => $post->tags,
-                ])
+            <div class="blog-posts">
+                <div class="blog-post">
+                    @include('nova-blog::partials.info', [
+                        'post' => $post,
+                    ])
+                    <div class="blog-post-annotation">{!! $post->annotation !!}</div>
+                    <div class="blog-post-content">{!! $post->content !!}</div>
+                    @include('nova-blog::partials.tags', [
+                        'tags' => $post->tags,
+                    ])
+                </div>
             </div>
         </div>
     </div>

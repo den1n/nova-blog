@@ -13,6 +13,7 @@ class Tool extends \Laravel\Nova\Tool
     {
         $models = config('nova-blog.models');
         $resources = config('nova-blog.resources');
+
         foreach ($resources as $name => $class) {
             if ($name !== 'user') {
                 $class::$model = $models[$name];
@@ -27,6 +28,7 @@ class Tool extends \Laravel\Nova\Tool
 	public function renderNavigation()
 	{
         $resources = config('nova-blog.resources');
+
 		return view('nova-blog::navigation', [
             'postUriKey' => $resources['post']::uriKey(),
             'commentUriKey' => $resources['comment']::uriKey(),

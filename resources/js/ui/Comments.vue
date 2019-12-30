@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Lang from '../mixins/Lang';
+import Lang from './Lang';
 
 export default {
     props: {

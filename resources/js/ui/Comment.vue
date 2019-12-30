@@ -13,7 +13,7 @@
             <div class="blog-comment-content" v-html="comment.content"></div>
             <div class="blog-comment-controls" v-if="user.id">
                 <a href="#reply" v-if="!isAuthor" @click.prevent="handleReply">{{ t('Reply') }}</a>
-                <a href="#quote" @click.prevent="handleQuote">{{ t('To quote') }}</a>
+                <a href="#quote" @click.prevent="handleQuote">{{ t('Quote') }}</a>
                 <a href="#update" v-if="isAuthor || user.can_update_comments" @click.prevent="handleUpdating">{{ t('Update') }}</a>
                 <a href="#remove" v-if="isAuthor || user.can_delete_comments" @click.prevent="handleRemove">{{ t('Remove') }}</a>
             </div>
@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import Lang from '../mixins/Lang';
-import EventBus from '../mixins/EventBus';
+import Lang from './Lang';
+import EventBus from './EventBus';
 
 export default {
     props: {

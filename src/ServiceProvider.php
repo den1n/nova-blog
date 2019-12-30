@@ -51,9 +51,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             __DIR__ . '/../resources/views/templates' => resource_path('views/vendor/nova-blog/templates'),
         ], 'views');
 
-        // $this->publishes([
-        //     __DIR__ . '/../dist' => public_path('vendor/nova-blog'),
-        // ], 'public');
+        $this->publishes([
+            __DIR__ . '/../resources/js/ui' => resource_path('js/vendor/nova-blog'),
+        ], 'assets');
+
+        $this->publishes([
+            __DIR__ . '/../resources/sass/ui' => resource_path('sass/vendor/nova-blog'),
+        ], 'assets');
     }
 
     /**

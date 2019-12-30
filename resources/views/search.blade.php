@@ -5,17 +5,17 @@
 @section('nova-blog-content')
     <div class="card blog-card">
         <div class="card-header">{{ __('Search Results') }}</div>
-        <div class="card-body blog-posts">
-            @forelse($posts as $p)
-                @include('nova-blog::partials.post', [
-                    'post' => $p,
-                ])
-            @empty
-                <div class="blog-notice">
-                    {{ __('Nothing found') }}.
-                </div>
-            @endforelse
-            {{ $posts->links() }}
+        <div class="card-body">
+            <div class="blog-posts">
+                @forelse($posts as $p)
+                    @include('nova-blog::partials.post', [
+                        'post' => $p,
+                    ])
+                @empty
+                    <div>{{ __('Nothing found') }}</div>
+                @endforelse
+                {{ $posts->links() }}
+            </div>
         </div>
     </div>
 @endsection

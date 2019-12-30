@@ -27,8 +27,8 @@
 export default {
     props: {
         name: String,
-        keywords: { required: true },
-        limit: { default: 8 },
+        keywords: { type: Array, required: true },
+        limit: { type: Number, default: 8 },
         errors: Object,
     },
 
@@ -53,6 +53,7 @@ export default {
 
         add() {
             const input = this.input.replace('/,/', ' ').trim();
+
             if (input.length && !this.keywords.includes(input)) {
                 this.emitInput([...this.keywords, input]);
                 this.clear();
@@ -99,6 +100,10 @@ export default {
             if (e.target.value)
                 this.add();
         },
+    },
+
+    mounted() {
+        this.keywords = this.keywords || [];
     },
 };
 </script>
