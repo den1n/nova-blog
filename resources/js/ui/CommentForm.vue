@@ -67,7 +67,7 @@ export default {
     data() {
         return {
             busy: false,
-            hasContent: false,
+            canSubmit: false,
             notice: '',
         };
     },
@@ -81,10 +81,6 @@ export default {
         editor() {
             return this.$el.querySelector('[contenteditable]');
         },
-
-        canSubmit() {
-            return !this.busy && this.hasContent;
-        },
     },
 
     methods: {
@@ -92,6 +88,13 @@ export default {
             if (scrollToEditor)
                 this.editor.scrollIntoView({ behavior: 'smooth' });
             this.editor.focus();
+        },
+
+        updateState() {
+            this.canSubmit = !this.busy && (
+                   this.editor.innerText.trim()
+                || this.editor.querySelectorAll('a, img, iframe').length
+            );
         },
 
         create() {
@@ -127,6 +130,7 @@ export default {
                         range: selection.rangeCount ? selection.getRangeAt(0) : document.createRange(),
                         selection,
                     });
+                    this.updateState();
                     this.focus();
                 }
             }
@@ -227,6 +231,8 @@ export default {
             selection.removeAllRanges();
             selection.addRange(range);
             range.collapse();
+
+            this.updateState();
             this.focus(true);
         },
 
@@ -249,14 +255,13 @@ export default {
             selection.removeAllRanges();
             selection.addRange(range);
             range.collapse();
+
+            this.updateState();
             this.focus(true);
         },
 
         handleChanges(e) {
-            this.hasContent = (
-                   this.editor.innerText.trim()
-                || this.editor.querySelectorAll('img, iframe').length
-            );
+            this.updateState();
         },
 
         handleShortcut(e) {
@@ -268,9 +273,8 @@ export default {
 
         handleSubmit() {
             this.notice = '';
-            const hasContent = this.editor.innerText.trim() || this.editor.querySelectorAll('img, .blog-comment-video').length;
 
-            if (!this.busy && hasContent) {
+            if (this.canSubmit) {
                 this.busy = true;
                 const methodName = this.commentId ? 'update' : 'create';
 
@@ -280,6 +284,8 @@ export default {
                         .finally(() => this.busy = false);
                 } else
                     throw new Error('Invalid method name');
+
+                this.updateState();
             }
         },
 
