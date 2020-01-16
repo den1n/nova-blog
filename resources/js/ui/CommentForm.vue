@@ -42,7 +42,7 @@
                 </svg>
             </button>
         </div>
-        <div class="blog-comment-form-editor" contenteditable="true" @keydown="handleShortcut" @input="handleChanges" v-html="commentContent"></div>
+        <div class="blog-comment-form-editor form-control" contenteditable="true" @keydown="handleShortcut" @input="handleChanges" v-html="commentContent"></div>
         <div class="blog-comment-form-notice" v-if="notice">{{ notice }}</div>
         <button type="submit" class="btn btn-primary" title="Ctrl + Enter" :disabled="!canSubmit" @click.prevent="handleSubmit">
             {{ commentId ? t('Update') : t('Submit') }}
