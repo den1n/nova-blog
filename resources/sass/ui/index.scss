@@ -303,6 +303,11 @@
             }
         }
 
+        .blog-post-title,
+        .blog-post-category {
+            font-size: 1em;
+        }
+
         .blog-categories {
             display: flex;
             flex-direction: column;
