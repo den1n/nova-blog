@@ -3,6 +3,7 @@
 namespace Den1n\NovaBlog\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class Post extends \Illuminate\Database\Eloquent\Model
@@ -40,6 +41,20 @@ class Post extends \Illuminate\Database\Eloquent\Model
         'category',
         'author',
     ];
+
+    /**
+     * The "booting" method of the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $post) {
+            $post->published_at = $post->published_at ?: now();
+            $post->slug = static::generateSlug($post);
+            $post->author_id = $post->author_id ?: auth()->user()->id;
+        });
+    }
 
     /**
      * Get the table associated with the model.
@@ -84,6 +99,20 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ]);
         } else
             return '';
+    }
+
+    /**
+     * Generate unique post slug.
+     */
+    protected static function generateSlug (self $post): string
+    {
+        $counter = 1;
+        $slug = $original = $post->slug ?: Str::slug($post->title);
+
+        while (static::where('id', '!=', $post->id)->where('slug', $slug)->exists())
+            $slug = $original . '-' . (++$counter);
+
+        return $slug;
     }
 
     /**

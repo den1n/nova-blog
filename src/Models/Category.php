@@ -3,6 +3,7 @@
 namespace Den1n\NovaBlog\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class Category extends \Illuminate\Database\Eloquent\Model
 {
@@ -13,6 +14,18 @@ class Category extends \Illuminate\Database\Eloquent\Model
     protected $appends = [
         'url',
     ];
+
+    /**
+     * The "booting" method of the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $category) {
+            $category->slug = static::generateSlug($category);
+        });
+    }
 
     /**
      * Get the table associated with the model.
@@ -41,6 +54,20 @@ class Category extends \Illuminate\Database\Eloquent\Model
             ]);
         } else
             return '';
+    }
+
+    /**
+     * Generate unique category slug.
+     */
+    protected static function generateSlug (self $category): string
+    {
+        $counter = 1;
+        $slug = $original = $category->slug ?: Str::slug($category->name);
+
+        while (static::where('id', '!=', $category->id)->where('slug', $slug)->exists())
+            $slug = $original . '-' . (++$counter);
+
+        return $slug;
     }
 
     /**

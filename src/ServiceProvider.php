@@ -18,12 +18,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadRoutes();
         $this->loadViews();
 
-        $models = config('nova-blog.models');
-        $models['post']::observe(Observers\Post::class);
-        $models['category']::observe(Observers\Category::class);
-        $models['comment']::observe(Observers\Comment::class);
-        $models['tag']::observe(Observers\Tag::class);
-
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-blog-fields', __DIR__ . '/../dist/fields.js');
             Nova::style('nova-blog-fields', __DIR__ . '/../dist/fields.css');

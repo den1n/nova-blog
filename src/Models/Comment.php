@@ -20,6 +20,18 @@ class Comment extends \Illuminate\Database\Eloquent\Model
     ];
 
     /**
+     * The "booting" method of the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $comment) {
+            $comment->author_id = $comment->author_id ?: auth()->user()->id;
+        });
+    }
+
+    /**
      * Get the table associated with the model.
      */
     public function getTable(): string
