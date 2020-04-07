@@ -3,22 +3,9 @@
         <div class="keywords-input w-full form-control form-input form-input-bordered flex items-center" :class="{ 'border-danger': errors.has(name) }" @click="focusInput">
             <span v-for="keyword in keywords" :key="keyword" class="keywords-input-keyword mr-1">
                 <span>{{ keyword }}</span>
-                <button
-                    type="button"
-                    class="keywords-input-remove"
-                    @click.prevent.stop="remove(keyword)"
-                >
-                    &times;
-                </button>
+                <button type="button"  class="keywords-input-remove" @click="handleRemove(keyword)">&times;</button>
             </span>
-            <input
-                ref="input"
-                class="keywords-input-text"
-                v-bind:value="input"
-                v-on:input="handleInput"
-                v-on:keydown="handleKeydown"
-                v-on:blur="handleBlur"
-            >
+            <input ref="input" class="keywords-input-text" :value="input" @input="handleInput" @keydown="handleKeydown" @blur="handleBlur">
         </div>
     </div>
 </template>
@@ -27,8 +14,7 @@
 export default {
     props: {
         name: String,
-        keywords: { type: Array, required: true },
-        limit: { type: Number, default: 8 },
+        keywords: { type: Array, default: () => [] },
         errors: Object,
     },
 
@@ -47,34 +33,28 @@ export default {
             this.$refs.input.focus();
         },
 
-        select(keyword) {
-            this.emitInput(keyword);
-        },
-
         add() {
             const input = this.input.replace('/,/', ' ').trim();
 
             if (input.length && !this.keywords.includes(input)) {
-                this.emitInput([...this.keywords, input]);
+                this.$emit('input', [...this.keywords, input]);
                 this.clear();
-            }
-        },
-
-        remove(keyword) {
-            this.emitInput(this.keywords.filter(k => k !== keyword));
+                return true;
+            } else
+                this.clear();
         },
 
         clear() {
             this.input = '';
         },
 
-        emitInput(keywords) {
-            this.$emit('input', keywords);
-            this.focusInput();
-        },
-
         handleInput(e) {
             this.input = e.target.value;
+        },
+
+        handleRemove(keyword) {
+            this.$emit('input', this.keywords.filter(k => k != keyword));
+            this.focusInput();
         },
 
         handleKeydown(e) {
@@ -97,13 +77,52 @@ export default {
         },
 
         handleBlur(e) {
-            if (e.target.value)
-                this.add();
+            if (e.target.value && this.add())
+                this.focusInput();
         },
-    },
-
-    mounted() {
-        this.keywords = this.keywords || [];
     },
 };
 </script>
+
+<style scoped>
+.keywords-input {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 36px;
+    padding-top: 0.25rem;
+}
+
+.keywords-input:focus-within {
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.keywords-input-keyword {
+    align-items: center;
+    background-color: var(--primary);
+    border-radius: 0.25rem;
+    color: white;
+    display: inline-flex;
+    font-size: 0.875rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    user-select: none;
+}
+
+.keywords-input-remove {
+    color: white;
+    font-size: 1.125rem;
+    margin-left: 0.25rem;
+}
+
+.keywords-input-remove:focus {
+    outline: none;
+}
+
+.keywords-input-text {
+    margin-bottom: 0.25rem;
+    margin-left: 0.25rem;
+    min-width: 8rem;
+    outline: 0;
+}
+</style>

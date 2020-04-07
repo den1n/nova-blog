@@ -17,11 +17,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadTranslations();
         $this->loadRoutes();
         $this->loadViews();
-
-        Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-blog-fields', __DIR__ . '/../dist/fields.js');
-            Nova::style('nova-blog-fields', __DIR__ . '/../dist/fields.css');
-        });
     }
 
     /**

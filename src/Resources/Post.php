@@ -115,8 +115,10 @@ class Post extends Resource
     {
         return Select::make(__('Template'), 'template')->options(function () {
             $templates = [];
+
             foreach (config('nova-blog.controller.templates') as $template)
                 $templates[$template['name']] = __($template['description']);
+
             return $templates;
         });
     }

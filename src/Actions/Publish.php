@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Fields\DateTime;
 
 class Publish extends Action

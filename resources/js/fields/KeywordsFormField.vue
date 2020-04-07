@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import KeywordsInput from './KeywordsInput.vue';
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import KeywordsInput from './KeywordsInput.vue';
 
 export default {
     inheritAttrs: false,
@@ -22,13 +22,13 @@ export default {
         HandlesValidationErrors,
     ],
 
-    props: [
-        'field',
-    ],
+    props: {
+        field: Object,
+    },
 
     data() {
         return {
-            keywords: this.field.value,
+            keywords: this.field.value || '',
         };
     },
 

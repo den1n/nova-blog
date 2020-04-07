@@ -1,7 +1,6 @@
 let mix = require('laravel-mix')
 
 mix.setPublicPath('dist')
-    .sass('resources/sass/fields.scss', '.')
-    .js('resources/js/fields.js', '.')
+    .js('resources/js/nova.js', '.')
     .sourceMaps()
     .version();

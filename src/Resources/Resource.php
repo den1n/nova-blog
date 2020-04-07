@@ -30,10 +30,11 @@ class Resource extends \Laravel\Nova\Resource
     {
         if (empty($request->get('orderBy'))) {
             $query->getQuery()->orders = [];
-            foreach (static::$displayInOrder as $order) {
+
+            foreach (static::$displayInOrder as $order)
                 $query->orderBy(reset($order), end($order));
-            }
         }
+
         return $query;
     }
 
@@ -70,10 +71,12 @@ class Resource extends \Laravel\Nova\Resource
     {
         $class = config('nova-blog.editor.class');
         $field = $class::make($name, $field);
+
         foreach (config('nova-blog.editor.options') as $method => $arguments) {
             if (method_exists($field, $method))
                 $field->{$method}(...$arguments);
         }
+
         return $field;
     }
 
