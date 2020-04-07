@@ -37,7 +37,7 @@ class Tag extends \Illuminate\Database\Eloquent\Model
     {
         if ($this->exists) {
             return route('nova-blog.tag', [
-                'tag' => $this->id,
+                'tag' => $this,
             ]);
         } else
             return '';

@@ -37,7 +37,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
     {
         if ($this->exists) {
             return route('nova-blog.category', [
-                'category' => $this->id,
+                'category' => $this,
             ]);
         } else
             return '';

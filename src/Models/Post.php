@@ -80,7 +80,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
     {
         if ($this->exists) {
             return route('nova-blog.post', [
-                'post' => $this->id,
+                'post' => $this,
             ]);
         } else
             return '';
