@@ -78,9 +78,12 @@ class Post extends \Illuminate\Database\Eloquent\Model
      */
     public function getUrlAttribute(): string
     {
-        return route('nova-blog.post', [
-            'post' => $this,
-        ]);
+        if ($this->exists) {
+            return route('nova-blog.post', [
+                'post' => $this->id,
+            ]);
+        } else
+            return '';
     }
 
     /**

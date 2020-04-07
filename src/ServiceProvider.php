@@ -75,16 +75,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function loadRoutes(): void
     {
-        Route::macro('novaBlogRoutes', function (string $prefix = 'blog') {
+        $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
+
+        Route::macro('novaBlogRoutes', function (string $prefix = 'blog') use ($controller) {
             Route::model('post', config('nova-blog.models.post'));
             Route::model('category', config('nova-blog.models.category'));
             Route::model('tag', config('nova-blog.models.tag'));
+
             Route::group([
                 'prefix' => $prefix,
                 'namespace' => '\\' . __NAMESPACE__,
                 'middleware' => ['web'],
-            ], function () {
-                $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
+            ], function () use ($controller) {
                 Route::get('/', $controller . '@index')->where('int', '\d+')->name('nova-blog.index');
                 Route::get('/search', $controller . '@search')->name('nova-blog.search');
                 Route::get('/author/{id}', $controller . '@author')->name('nova-blog.author');
@@ -99,8 +101,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             'prefix' => '/vendor/nova-blog',
             'namespace' => '\\' . __NAMESPACE__,
             'middleware' => ['web'],
-        ], function () {
-            $controller = '\\' . ltrim(config('nova-blog.controller.class'), '\\');
+        ], function () use ($controller) {
             Route::get('/comments', $controller . '@comments')->name('nova-blog.comments');
             Route::put('/comments', $controller . '@commentsCreate')->name('nova-blog.comments.create');
             Route::post('/comments', $controller . '@commentsUpdate')->name('nova-blog.comments.update');

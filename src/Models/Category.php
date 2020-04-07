@@ -35,9 +35,12 @@ class Category extends \Illuminate\Database\Eloquent\Model
      */
     public function getUrlAttribute(): string
     {
-        return route('nova-blog.category', [
-            'category' => $this,
-        ]);
+        if ($this->exists) {
+            return route('nova-blog.category', [
+                'category' => $this->id,
+            ]);
+        } else
+            return '';
     }
 
     /**

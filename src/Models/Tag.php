@@ -35,9 +35,12 @@ class Tag extends \Illuminate\Database\Eloquent\Model
      */
     public function getUrlAttribute(): string
     {
-        return route('nova-blog.tag', [
-            'tag' => $this,
-        ]);
+        if ($this->exists) {
+            return route('nova-blog.tag', [
+                'tag' => $this->id,
+            ]);
+        } else
+            return '';
     }
 
     /**
