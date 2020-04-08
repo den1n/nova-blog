@@ -41,11 +41,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         ], 'views');
 
         $this->publishes([
-            __DIR__ . '/../resources/js/ui' => resource_path('js/vendor/nova-blog'),
+            __DIR__ . '/../resources/js/frontend' => resource_path('js/vendor/nova-blog'),
         ], 'assets');
 
         $this->publishes([
-            __DIR__ . '/../resources/sass/ui' => resource_path('sass/vendor/nova-blog'),
+            __DIR__ . '/../resources/sass/frontend.scss' => resource_path('sass/vendor/nova-blog/index.scss'),
         ], 'assets');
     }
 
@@ -103,7 +103,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                     'prefix' => 'nova-vendor/den1n/nova-blog',
                     'middleware' => ['nova', 'api'],
                 ], function () {
-                    Route::get('/tags/field', TagsFieldController::class . '@index');
+                    Route::get('/tags', TagsFieldController::class . '@index');
                 });
             }
         });

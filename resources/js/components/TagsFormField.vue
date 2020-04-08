@@ -3,6 +3,8 @@
         <template slot="field">
             <tags-input
                 :name="field.attribute"
+                :placeholder="field.name"
+                :class="errorClasses"
                 :limit="field.limit"
                 :errors="errors"
                 v-model="tags"
@@ -12,24 +14,20 @@
 </template>
 
 <script>
-import TagsInput from './TagsInput.vue';
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import TagsInput from './TagsInput.vue';
 
 export default {
-    inheritAttrs: false,
-
     mixins: [
         FormField,
         HandlesValidationErrors,
     ],
 
-    props: [
-        'field',
-    ],
+    props: ['resourceName', 'resourceId', 'field'],
 
     data() {
         return {
-            tags: this.field.value,
+            tags: this.field.value || [],
         };
     },
 

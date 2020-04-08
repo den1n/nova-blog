@@ -4,8 +4,6 @@
 
 <script>
 export default {
-    inheritAttrs: false,
-
-    props: ['field'],
+    props: ['resourceName', 'field'],
 };
 </script>

@@ -5,18 +5,14 @@
                 <span>{{ keyword }}</span>
                 <button type="button"  class="keywords-input-remove" @click="handleRemove(keyword)">&times;</button>
             </span>
-            <input ref="input" class="keywords-input-text" :value="input" @input="handleInput" @keydown="handleKeydown" @blur="handleBlur">
+            <input ref="input" class="keywords-input-text" :value="input" :placeholder="placeholder" @input="handleInput" @keydown="handleKeydown" @blur="handleBlur">
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-        name: String,
-        keywords: { type: Array, default: () => [] },
-        errors: Object,
-    },
+    props: ['name', 'keywords', 'placeholder', 'errors'],
 
     model: {
         prop: 'keywords',
@@ -120,8 +116,8 @@ export default {
 }
 
 .keywords-input-text {
+    flex: 1;
     margin-bottom: 0.25rem;
-    margin-left: 0.25rem;
     min-width: 8rem;
     outline: 0;
 }

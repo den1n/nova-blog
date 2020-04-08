@@ -1,8 +1,10 @@
 <template>
-    <default-field :field="field" :errors="errors">
+    <default-field :field="field" :errors="errors" class="justify-content-stretch">
         <template slot="field">
             <keywords-input
                 :name="field.attribute"
+                :placeholder="field.name"
+                :class="errorClasses"
                 :errors="errors"
                 v-model="keywords"
             ></keywords-input>
@@ -15,20 +17,16 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova';
 import KeywordsInput from './KeywordsInput.vue';
 
 export default {
-    inheritAttrs: false,
-
     mixins: [
         FormField,
         HandlesValidationErrors,
     ],
 
-    props: {
-        field: Object,
-    },
+    props: ['resourceName', 'resourceId', 'field'],
 
     data() {
         return {
-            keywords: this.field.value || '',
+            keywords: this.field.value || [],
         };
     },
 

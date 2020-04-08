@@ -152,7 +152,7 @@
         max-height: 48px;
         max-width: 48px;
 
-        @media (max-width: 575.98px) {
+        @include media-breakpoint-down(xs) {
             max-height: 32px;
             max-width: 32px;
         }
@@ -175,7 +175,7 @@
     .blog-comment-date {
         margin-left: auto;
 
-        @media (max-width: 575.98px) {
+        @include media-breakpoint-down(xs) {
             display: none;
         }
     }
@@ -183,7 +183,7 @@
     .blog-comment-link {
         margin-left: 1rem;
 
-        @media (max-width: 575.98px) {
+        @include media-breakpoint-down(xs) {
             margin-left: auto;
         }
     }
@@ -209,12 +209,6 @@
         a {
             margin-right: .5rem;
         }
-
-        /*
-        @media (max-width: 575.98px) {
-            font-size: $font-size-sm;
-        }
-        */
 
         @include media-breakpoint-down(xs) {
             font-size: $font-size-sm;
@@ -284,6 +278,7 @@
             background-color: white;
             border: 1px solid #dee2e6;
             margin-bottom: .5rem;
+            height: auto;
             min-height: 100px;
             padding: .5rem;
         }

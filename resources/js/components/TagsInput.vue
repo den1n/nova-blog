@@ -3,30 +3,13 @@
         <div class="tags-input w-full form-control form-input form-input-bordered flex items-center" :class="{ 'border-danger': errors.has(name) }" @click="focusInput">
             <span v-for="tag in tags" :key="tag" class="tags-input-tag mr-1">
                 <span>{{ tag }}</span>
-                <button
-                    type="button"
-                    class="tags-input-remove"
-                    @click.prevent.stop="remove(tag)"
-                >
-                    &times;
-                </button>
+                <button type="button" class="tags-input-remove" @click="handleRemove(tag)">&times;</button>
             </span>
-            <input
-                ref="input"
-                class="tags-input-text"
-                v-bind:value="input"
-                v-on:input="handleInput"
-                v-on:keydown="handleKeydown"
-                v-on:blur="handleBlur"
-            >
+            <input ref="input" class="tags-input-text" :value="input" :placeholder="placeholder" @input="handleInput" @keydown="handleKeydown" @blur="handleBlur">
         </div>
         <ul v-if="suggestions.length" class="tags-input-suggestions">
             <li v-for="suggestion in suggestions" :key="suggestion" class="mr-1">
-                <button
-                    class="tags-input-tag"
-                    @mousedown.prevent
-                    @click.prevent="suggest(suggestion)"
-                >
+                <button class="tags-input-tag" @mousedown.prevent @click.prevent="suggest(suggestion)">
                     {{ suggestion }}
                 </button>
             </li>
@@ -39,6 +22,7 @@ export default {
     props: {
         name: String,
         tags: String,
+        placeholder: String,
         limit: { type: Number, default: 8 },
         errors: Object,
     },
@@ -64,7 +48,7 @@ export default {
             if (this.input && this.limit) {
                 let query = `?tag=${this.input}&limit=${this.limit}`;
 
-                window.axios.get(`/nova-vendor/den1n/nova-blog/tags/field${query}`).then(response => {
+                window.axios.get(`/nova-vendor/den1n/nova-blog/tags${query}`).then(response => {
                     if (this.input) {
                         this.suggestions = response.data.filter(suggestion => {
                             return !this.tags.find(tag => tag === suggestion);
@@ -77,25 +61,23 @@ export default {
         },
 
         suggest(suggestion) {
-            this.emitInput([...this.tags, suggestion]);
+            this.$emit('input', [...this.tags, suggestion]);
             this.clear();
         },
 
         select(tag) {
-            this.emitInput(tag);
+            this.$emit('input', tag);
         },
 
         add() {
             const input = this.input.trim();
 
             if (input.length && !this.tags.includes(input)) {
-                this.emitInput([...this.tags, input]);
+                this.$emit('input', [...this.tags, input]);
                 this.clear();
-            }
-        },
-
-        remove(tag) {
-            this.emitInput(this.tags.filter(t => t !== tag));
+                return true;
+            } else
+                this.clear();
         },
 
         clear() {
@@ -103,8 +85,8 @@ export default {
             this.suggestions = [];
         },
 
-        emitInput(tags) {
-            this.$emit('input', tags);
+        handleRemove(tag) {
+            this.$emit('input', this.tags.filter(t => t !== tag));
             this.focusInput();
         },
 
@@ -137,8 +119,8 @@ export default {
         },
 
         handleBlur(e) {
-            if (e.target.value)
-                this.add();
+            if (e.target.value && this.add())
+                this.focusInput();
         },
     },
 };
@@ -180,8 +162,8 @@ export default {
 }
 
 .tags-input-text {
+    flex: 1;
     margin-bottom: 0.25rem;
-    margin-left: 0.25rem;
     min-width: 8rem;
     outline: 0;
 }
