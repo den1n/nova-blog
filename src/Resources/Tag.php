@@ -63,9 +63,9 @@ class Tag extends Resource
                 ->sortable(),
 
             DateTime::make(__('Updated At'), 'updated_at')
-                ->hideFromIndex()
                 ->hideWhenCreating()
-                ->hideWhenUpdating(),
+                ->hideWhenUpdating()
+                ->sortable(),
 
             BelongsToMany::make(__('Posts'), 'posts', $resources['post']),
         ];
