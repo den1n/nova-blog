@@ -27,24 +27,24 @@ return [
     ],
 
     /**
-     * Settings of Nova field used for editing posts content.
+     * Settings for WYSIWYG editor.
      */
 
     'editor' => [
         /**
-         * Name of Nova field class used for editing of posts content.
+         * Nova field class name.
          */
 
         'class' => \Laravel\Nova\Fields\Trix::class,
 
         /**
-         * Options which will be applied to te field instance.
+         * Options which will be applied to the field instance.
          * Key: name of field method.
          * Value: list of method arguments.
          */
 
         'options' => [
-            // 'withFiles' => ['public'],
+            'withFiles' => ['public', 'nova-blog'],
         ],
     ],
 
