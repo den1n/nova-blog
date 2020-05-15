@@ -36,6 +36,8 @@ class CreateBlogTables extends Migration
 
             $table->foreign('category_id')->references('id')->on($tables['categories'])->onDelete('cascade');
             $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
+            $table->index('category_id');
+            $table->index('author_id');
             $table->index('published_at');
         });
 
@@ -57,7 +59,8 @@ class CreateBlogTables extends Migration
 
             $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
             $table->foreign('tag_id')->references('id')->on($tables['tags'])->onDelete('cascade');
-
+            $table->index('post_id');
+            $table->index('tag_id');
         });
 
         Schema::create($tables['comments'], function (Blueprint $table) use ($tables) {
@@ -69,6 +72,8 @@ class CreateBlogTables extends Migration
 
             $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
             $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
+            $table->index('post_id');
+            $table->index('author_id');
         });
     }
 
