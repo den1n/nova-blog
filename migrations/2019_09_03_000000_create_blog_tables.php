@@ -29,13 +29,11 @@ class CreateBlogTables extends Migration
             $table->string('template');
             $table->text('annotation')->nullable();
             $table->text('content')->nullable();
-            $table->integer('category_id')->unsigned();
-            $table->bigInteger('author_id')->unsigned();
+            $table->foreignId('category_id')->constrained($tables['categories'])->onDelete('cascade');
+            $table->foreignId('author_id')->constrained($tables['users'])->onDelete('cascade');
             $table->timestamps();
             $table->timestamp('published_at')->useCurrent();
 
-            $table->foreign('category_id')->references('id')->on($tables['categories'])->onDelete('cascade');
-            $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
             $table->index('category_id');
             $table->index('author_id');
             $table->index('published_at');
@@ -54,11 +52,9 @@ class CreateBlogTables extends Migration
         });
 
         Schema::create($tables['post_tags'], function (Blueprint $table) use ($tables) {
-            $table->integer('post_id')->unsigned();
-            $table->integer('tag_id')->unsigned();
+            $table->foreignId('post_id')->constrained($tables['posts'])->onDelete('cascade');
+            $table->foreignId('tag_id')->constrained($tables['tags'])->onDelete('cascade');
 
-            $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
-            $table->foreign('tag_id')->references('id')->on($tables['tags'])->onDelete('cascade');
             $table->index('post_id');
             $table->index('tag_id');
         });
@@ -66,12 +62,10 @@ class CreateBlogTables extends Migration
         Schema::create($tables['comments'], function (Blueprint $table) use ($tables) {
             $table->increments('id');
             $table->string('content', 4000);
-            $table->integer('post_id')->unsigned();
-            $table->bigInteger('author_id')->unsigned();
+            $table->foreignId('post_id')->constrained($tables['posts'])->onDelete('cascade');
+            $table->foreignId('author_id')->constrained($tables['users'])->onDelete('cascade');
             $table->timestamps();
 
-            $table->foreign('post_id')->references('id')->on($tables['posts'])->onDelete('cascade');
-            $table->foreign('author_id')->references('id')->on($tables['users'])->onDelete('cascade');
             $table->index('post_id');
             $table->index('author_id');
         });
